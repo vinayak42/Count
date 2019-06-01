@@ -27,6 +27,10 @@ public class LoginActivity extends AppCompatActivity {
     private static int RC_SIGN_IN = 100;
     public static final String LOG_TAG = LoginActivity.class.getSimpleName();
 
+    public GoogleSignInClient getGoogleSignInClient() {
+        return googleSignInClient;
+    }
+
     private void signIn() {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
