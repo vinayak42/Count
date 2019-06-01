@@ -23,12 +23,13 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                 Class nextActivityClass = getNextClass();
                 Intent intent = new Intent(SplashScreenActivity.this, nextActivityClass);
+                startActivity(intent);
                 finish(); // so that the back button doesn't bring back to the SplashScreen
             }
 
             private Class getNextClass() {
                 // TODO complete this method based on logged in status
-                return null;
+                return LoginActivity.class;
             }
         },delayDuration);
     }
