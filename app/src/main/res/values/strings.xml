@@ -11,4 +11,11 @@
     <string name="login_failed">"Login failed"</string>
     <string name="sign_out">Sign out</string>
     <string name="title_activity_dashboard">DashboardActivity</string>
+    <string name="my_counters_header">My counters</string>
+    <string name="counter_title_placeholder">Counter Title</string>
+    <string name="zero">0</string>
+    <string name="increment_content_desc">increment</string>
+    <string name="decrement_content_desc">decrement</string>
+    <string name="last_updated_header">Last updated</string>
+    <string name="date_created_header">Date created</string>
 </resources>
