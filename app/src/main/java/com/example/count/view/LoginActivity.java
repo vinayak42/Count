@@ -160,6 +160,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signOut() {
+        googleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
         FirebaseAuth.getInstance().signOut();
         Toast.makeText(this, "Signed out!", Toast.LENGTH_SHORT).show();
     }
