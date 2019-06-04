@@ -73,6 +73,7 @@ public class DashboardActivity extends AppCompatActivity
         // Here work starts
 
         // populate listview using adapter
+        // thanks a tonne to https://youtu.be/kyGVgrLG3KU
         counterArrayList = new ArrayList<>();
         countersListAdapter = new CountersListAdapter(counterArrayList);
         db = Utils.getInstance().getDb();
@@ -96,6 +97,7 @@ public class DashboardActivity extends AppCompatActivity
                     if (documentChange.getType() == DocumentChange.Type.ADDED) {
                         Counter counter = documentChange.getDocument().toObject(Counter.class);
                         counterArrayList.add(counter);
+                        countersListAdapter.notifyDataSetChanged();
                     }
                 }
             }
