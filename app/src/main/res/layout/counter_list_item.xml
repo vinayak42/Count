@@ -83,7 +83,7 @@
         app:layout_constraintTop_toBottomOf="@+id/last_updated_tv" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/date_created_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

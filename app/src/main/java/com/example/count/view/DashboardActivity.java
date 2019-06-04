@@ -2,17 +2,50 @@ package com.example.count.view;
 
 import android.os.Bundle;
 
+import com.example.count.R;
+import com.example.count.model.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
+import android.util.Log;
 import android.view.View;
 
-import com.example.count.R;
+import androidx.core.view.GravityCompat;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 
-public class DashboardActivity extends AppCompatActivity {
+import android.view.MenuItem;
+
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import androidx.drawerlayout.widget.DrawerLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.view.Menu;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+
+import javax.annotation.Nullable;
+
+public class DashboardActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String LOG_TAG = "DashboardTag";
+    private ArrayList<Counter> counterArrayList;
+    private FirebaseFirestore db;
+    private FirebaseUser user;
+    private CountersListAdapter countersListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +53,6 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,6 +61,101 @@ public class DashboardActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+
+
+        // Here work starts
+
+        // populate listview using adapter
+        counterArrayList = new ArrayList<>();
+        countersListAdapter = new CountersListAdapter(counterArrayList);
+        db = Utils.getInstance().getDb();
+        user = Utils.getInstance().getUser();
+
+        RecyclerView listView = (RecyclerView) findViewById(R.id.list_view);
+        listView.setHasFixedSize(true);
+        listView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        db.collection("Users").document(user.getUid())
+                .collection("counterArrayList").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+
+                if (e != null) {
+                    Log.e(LOG_TAG, e.getMessage());
+                }
+                for (DocumentChange documentChange : queryDocumentSnapshots.getDocumentChanges()) {
+
+                    if (documentChange.getType() == DocumentChange.Type.ADDED) {
+                        Counter counter = documentChange.getDocument().toObject(Counter.class);
+                        counterArrayList.add(counter);
+                    }
+                }
+            }
+        });
     }
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.dashboard, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_home) {
+            // Handle the camera action
+        } else if (id == R.id.nav_gallery) {
+
+        } else if (id == R.id.nav_slideshow) {
+
+        } else if (id == R.id.nav_tools) {
+
+        } else if (id == R.id.nav_share) {
+
+        } else if (id == R.id.nav_send) {
+
+        }
+
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 }

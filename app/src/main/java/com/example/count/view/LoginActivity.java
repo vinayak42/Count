@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.count.R;
+import com.example.count.model.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -83,75 +84,42 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
-    }
 
-    private void verifyDocumentOnFirebase() {
-
-        final DocumentReference userRef = db.collection("users").document(user.getUid());
-
-        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot documentSnapshot = task.getResult();
-
-                    if (documentSnapshot.exists()) {
-                        Toast.makeText(LoginActivity.this, "Document exists", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Document not found", Toast.LENGTH_SHORT).show();
-                        Map<String, Object> newUser = new HashMap<>();
-                        newUser.put("uid", user.getUid());
-                        newUser.put("name", user.getDisplayName());
-                        newUser.put("email", user.getEmail());
-
-                        userRef.set(newUser)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Toast.makeText(LoginActivity.this, "Created your document on the database", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
-                }
-                else {
-                    Log.e(LOG_TAG, "FIREBASE ERROR: " + task.getException());
-                }
-            }
-        });
-
-//                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                        if (task.isSuccessful()) {
-//                            if (!task.getResult().exists()) {
-//                                // create a document for the user
-//                                Map<String, Object> newUser = new HashMap<>();
-//                                newUser.put("uid", user.getUid());
-//                                newUser.put("name", user.getDisplayName());
-//                                newUser.put("email", user.getEmail());
-//
-//                                userRef.set(newUser)
-//                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                            @Override
-//                                            public void onSuccess(Void aVoid) {
-//                                                Toast.makeText(LoginActivity.this, "Created your document on the database", Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        });
-//                            }
-//
-//                            else {
-//                                Toast.makeText(LoginActivity.this, "Your document already exists!", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
-//                });
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        
+        if (currentUser != null) {
+            Utils.getInstance().setUser(user);
+            Utils.getInstance().setDb(db);
+            Intent intent = new Intent(this, DashboardActivity.class);
+            startActivity(intent);
+        }
+        
+        else {
+            Toast.makeText(this, "Kindly login to continue", Toast.LENGTH_SHORT).show();
+        }
+        
+        updateUI(currentUser);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthWithGoogle(account);
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(LOG_TAG, "Google sign in failed", e);
+                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void signIn() {
@@ -169,6 +137,60 @@ public class LoginActivity extends AppCompatActivity {
                 });
         FirebaseAuth.getInstance().signOut();
         Toast.makeText(this, "Signed out!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void updateUI(FirebaseUser user) {
+
+        this.user = user;
+
+        if (user == null) {
+            Toast.makeText(this, "[Firebase] No login detected", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "[Firebase] Login detected: " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+            verifyDocumentOnFirebase();
+            Intent intent = new Intent(this, DashboardActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    private void verifyDocumentOnFirebase() {
+
+        final DocumentReference userRef = db.collection("users").document(user.getUid());
+
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+
+                    if (documentSnapshot.exists()) {
+                        // user already exists and his/her document is already there
+                        Toast.makeText(LoginActivity.this, "Document exists", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // new user has logged in so create the document and the counters subcollection too
+                        Toast.makeText(LoginActivity.this, "Document not found", Toast.LENGTH_SHORT).show();
+                        Map<String, Object> newUser = new HashMap<>();
+                        newUser.put("uid", user.getUid());
+                        newUser.put("name", user.getDisplayName());
+                        newUser.put("email", user.getEmail());
+                        newUser.put("counters", 0);
+
+                        userRef.set(newUser)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Toast.makeText(LoginActivity.this, "Created your document on the database", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                        // now create a document for the newly created user
+                    }
+                }
+                else {
+                    Log.e(LOG_TAG, "FIREBASE ERROR: " + task.getException());
+                }
+            }
+        });
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
@@ -192,38 +214,5 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
-
-    private void updateUI(FirebaseUser user) {
-
-        this.user = user;
-
-        if (user == null) {
-            Toast.makeText(this, "[Firebase] No login detected", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "[Firebase] Login detected: " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
-            verifyDocumentOnFirebase();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(LOG_TAG, "Google sign in failed", e);
-                Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 }
