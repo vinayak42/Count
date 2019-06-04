@@ -31,4 +31,7 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+    <string name="new_counter_message">Create your new counter</string>
+    <string name="counter_title_hint">Counter title</string>
+    <string name="counter_initial_value_hint">Initial value for counter, by default 0</string>
 </resources>

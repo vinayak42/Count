@@ -16,6 +16,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
@@ -46,6 +47,7 @@ public class DashboardActivity extends AppCompatActivity
     private FirebaseFirestore db;
     private FirebaseUser user;
     private CountersListAdapter countersListAdapter;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,12 +74,17 @@ public class DashboardActivity extends AppCompatActivity
 
         // Here work starts
 
+        // set db and user
+        mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        user = mAuth.getCurrentUser();
+
         // populate listview using adapter
         // thanks a tonne to https://youtu.be/kyGVgrLG3KU
         counterArrayList = new ArrayList<>();
         countersListAdapter = new CountersListAdapter(counterArrayList);
-        db = Utils.getInstance().getDb();
-        user = Utils.getInstance().getUser();
+//        db = Utils.getInstance().getDb();
+//        user = Utils.getInstance().getUser();
 
         RecyclerView listView = (RecyclerView) findViewById(R.id.list_view);
         listView.setHasFixedSize(true);

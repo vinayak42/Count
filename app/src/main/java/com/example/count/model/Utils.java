@@ -1,11 +1,10 @@
 package com.example.count.model;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class Utils {
-
-
 
     private static final Utils ourInstance = new Utils();
 
@@ -16,6 +15,7 @@ public class Utils {
     private Utils() {
     }
 
+    private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseFirestore db;
 
@@ -33,5 +33,11 @@ public class Utils {
 
     public void setUser(FirebaseUser user) {
         this.user = user;
+    }
+
+    public void init() {
+        mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
     }
 }

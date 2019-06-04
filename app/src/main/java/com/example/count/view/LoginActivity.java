@@ -88,9 +88,10 @@ public class LoginActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         
         if (currentUser != null) {
-            Utils.getInstance().setUser(user);
-            Utils.getInstance().setDb(db);
-            Intent intent = new Intent(this, DashboardActivity.class);
+//            Utils.getInstance().setUser(user);
+//            Utils.getInstance().setDb(db);
+            Utils.getInstance().init();
+            Intent intent = new Intent(this, AddCounterActivity.class);
             startActivity(intent);
         }
         
@@ -175,6 +176,7 @@ public class LoginActivity extends AppCompatActivity {
                         newUser.put("email", user.getEmail());
                         newUser.put("counters", 0);
 
+                        // now create a document for the newly created user
                         userRef.set(newUser)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
@@ -183,7 +185,6 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 });
 
-                        // now create a document for the newly created user
                     }
                 }
                 else {
