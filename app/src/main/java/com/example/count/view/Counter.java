@@ -4,8 +4,8 @@ import java.util.Date;
 
 public final class Counter {
     private String id;
-    private String counterTitle;
-    private long counterValue;
+    private String title;
+    private int value;
     private Date creationTimestamp;
     private Date lastUpdationTimestamp;
     private int goal;
@@ -13,10 +13,10 @@ public final class Counter {
     public Counter() {
     }
 
-    public Counter(String id, String counterTitle, Date creationTimestamp, Date lastUpdationTimestamp, int goal) {
+    public Counter(String id, String title, Date creationTimestamp, Date lastUpdationTimestamp, int goal) {
         this.id = id;
-        this.counterTitle = counterTitle;
-        this.counterValue = 0;
+        this.title = title;
+        this.value = 0;
         this.creationTimestamp = creationTimestamp;
         this.lastUpdationTimestamp = lastUpdationTimestamp;
         this.goal = goal;
@@ -26,8 +26,8 @@ public final class Counter {
         this.id = id;
     }
 
-    public void setCounterTitle(String counterTitle) {
-        this.counterTitle = counterTitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public void setCreationTimestamp(Date creationTimestamp) {
@@ -46,12 +46,16 @@ public final class Counter {
         return id;
     }
 
-    public long getCounterValue() {
-        return counterValue;
+    public int getValue() {
+        return value;
     }
 
-    public String getCounterTitle() {
-        return counterTitle;
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public Date getCreationTimestamp() {

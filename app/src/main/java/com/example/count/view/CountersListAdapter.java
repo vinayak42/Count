@@ -45,7 +45,7 @@ public class CountersListAdapter extends RecyclerView.Adapter<CountersListAdapte
         Counter counter = counterArrayList.get(position);
         holder.dateCreatedTv.setText(counter.getCreationTimestamp().toString());
         holder.lastUpdatedTv.setText(counter.getLastUpdationTimestamp().toString());
-        holder.counterValueTv.setText(counter.getCounterValue() + "");
+        holder.counterValueTv.setText(counter.getValue() + "");
     }
 
     @Override
