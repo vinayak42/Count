@@ -1,49 +1,49 @@
 package com.example.count.view;
 
-import com.google.firebase.Timestamp;
+import java.util.Date;
 
 public final class Counter {
-    private String counterId;
+    private String id;
     private String counterTitle;
     private long counterValue;
-    private Timestamp creationTime;
-    private Timestamp lastUpdatedTime;
+    private Date creationTimestamp;
+    private Date lastUpdationTimestamp;
     private int goal;
 
     public Counter() {
     }
 
-    public Counter(String counterId, String counterTitle, Timestamp creationTime, Timestamp lastUpdatedTime, int goal) {
-        this.counterId = counterId;
+    public Counter(String id, String counterTitle, Date creationTimestamp, Date lastUpdationTimestamp, int goal) {
+        this.id = id;
         this.counterTitle = counterTitle;
         this.counterValue = 0;
-        this.creationTime = creationTime;
-        this.lastUpdatedTime = lastUpdatedTime;
+        this.creationTimestamp = creationTimestamp;
+        this.lastUpdationTimestamp = lastUpdationTimestamp;
         this.goal = goal;
     }
 
-    public void setCounterId(String counterId) {
-        this.counterId = counterId;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public void setCounterTitle(String counterTitle) {
         this.counterTitle = counterTitle;
     }
 
-    public void setCreationTime(Timestamp creationTime) {
-        this.creationTime = creationTime;
+    public void setCreationTimestamp(Date creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
     }
 
-    public void setLastUpdatedTime(Timestamp lastUpdatedTime) {
-        this.lastUpdatedTime = lastUpdatedTime;
+    public void setLastUpdationTimestamp(Date lastUpdationTimestamp) {
+        this.lastUpdationTimestamp = lastUpdationTimestamp;
     }
 
     public void setGoal(int goal) {
         this.goal = goal;
     }
 
-    public String getCounterId() {
-        return counterId;
+    public String getId() {
+        return id;
     }
 
     public long getCounterValue() {
@@ -54,12 +54,12 @@ public final class Counter {
         return counterTitle;
     }
 
-    public Timestamp getCreationTime() {
-        return creationTime;
+    public Date getCreationTimestamp() {
+        return creationTimestamp;
     }
 
-    public Timestamp getLastUpdatedTime() {
-        return lastUpdatedTime;
+    public Date getLastUpdationTimestamp() {
+        return lastUpdationTimestamp;
     }
 
     public int getGoal() {

@@ -79,36 +79,6 @@ public class DashboardActivity extends AppCompatActivity
         db = FirebaseFirestore.getInstance();
         user = mAuth.getCurrentUser();
 
-        // populate listview using adapter
-        // thanks a tonne to https://youtu.be/kyGVgrLG3KU
-        counterArrayList = new ArrayList<>();
-        countersListAdapter = new CountersListAdapter(counterArrayList);
-//        db = Utils.getInstance().getDb();
-//        user = Utils.getInstance().getUser();
-
-        RecyclerView listView = (RecyclerView) findViewById(R.id.list_view);
-        listView.setHasFixedSize(true);
-        listView.setLayoutManager(new LinearLayoutManager(this));
-
-
-        db.collection("Users").document(user.getUid())
-                .collection("counterArrayList").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-
-                if (e != null) {
-                    Log.e(LOG_TAG, e.getMessage());
-                }
-                for (DocumentChange documentChange : queryDocumentSnapshots.getDocumentChanges()) {
-
-                    if (documentChange.getType() == DocumentChange.Type.ADDED) {
-                        Counter counter = documentChange.getDocument().toObject(Counter.class);
-                        counterArrayList.add(counter);
-                        countersListAdapter.notifyDataSetChanged();
-                    }
-                }
-            }
-        });
     }
 
     @Override

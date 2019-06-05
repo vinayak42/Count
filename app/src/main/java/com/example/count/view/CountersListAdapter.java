@@ -43,8 +43,8 @@ public class CountersListAdapter extends RecyclerView.Adapter<CountersListAdapte
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Counter counter = counterArrayList.get(position);
-        holder.dateCreatedTv.setText(counter.getCreationTime().toDate().toString());
-        holder.lastUpdatedTv.setText(counter.getLastUpdatedTime().toDate().toString());
+        holder.dateCreatedTv.setText(counter.getCreationTimestamp().toString());
+        holder.lastUpdatedTv.setText(counter.getLastUpdationTimestamp().toString());
         holder.counterValueTv.setText(counter.getCounterValue() + "");
     }
 
