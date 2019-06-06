@@ -6,7 +6,7 @@
     android:layout_height="200dp">
 
     <TextView
-        android:id="@+id/counter_title_tv"
+        android:id="@+id/counter_title_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -18,14 +18,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/counter_value_tv"
+        android:id="@+id/counter_value_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/zero"
         android:textSize="64sp"
-        app:layout_constraintStart_toStartOf="@+id/counter_title_tv"
-        app:layout_constraintTop_toBottomOf="@+id/counter_title_tv" />
+        app:layout_constraintStart_toStartOf="@+id/counter_title_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/counter_title_text_view" />
 
     <ImageButton
         android:id="@+id/increment_button"
@@ -34,8 +34,8 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/increment_content_desc"
-        app:layout_constraintStart_toEndOf="@+id/counter_value_tv"
-        app:layout_constraintTop_toTopOf="@+id/counter_value_tv"
+        app:layout_constraintStart_toEndOf="@+id/counter_value_text_view"
+        app:layout_constraintTop_toTopOf="@+id/counter_value_text_view"
         app:srcCompat="@android:drawable/arrow_up_float" />
 
     <ImageButton
@@ -45,8 +45,8 @@
         android:layout_marginStart="32dp"
         android:layout_marginBottom="8dp"
         android:contentDescription="@string/decrement_content_desc"
-        app:layout_constraintBottom_toBottomOf="@+id/counter_value_tv"
-        app:layout_constraintStart_toEndOf="@+id/counter_value_tv"
+        app:layout_constraintBottom_toBottomOf="@+id/counter_value_text_view"
+        app:layout_constraintStart_toEndOf="@+id/counter_value_text_view"
         app:srcCompat="@android:drawable/arrow_down_float" />
 
     <TextView
@@ -62,7 +62,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/last_updated_tv"
+        android:id="@+id/last_updated_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -79,11 +79,11 @@
         android:text="@string/date_created_header"
         android:textColor="@color/titleTextColor"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/last_updated_tv"
-        app:layout_constraintTop_toBottomOf="@+id/last_updated_tv" />
+        app:layout_constraintEnd_toEndOf="@+id/last_updated_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/last_updated_text_view" />
 
     <TextView
-        android:id="@+id/date_created_tv"
+        android:id="@+id/date_created_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

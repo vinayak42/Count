@@ -29,7 +29,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
             private Class getNextClass() {
                 // TODO complete this method based on logged in status
-                return AddCounterActivity.class;
+                return LoginActivity.class;
             }
         },delayDuration);
     }

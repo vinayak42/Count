@@ -1,15 +1,19 @@
 package com.example.count.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.count.R;
 import com.example.count.model.Utils;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -18,10 +22,12 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -32,6 +38,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
+import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -43,26 +50,28 @@ public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String LOG_TAG = "DashboardTag";
-    private ArrayList<Counter> counterArrayList;
     private FirebaseFirestore db;
     private FirebaseUser user;
-    private CountersListAdapter countersListAdapter;
     private FirebaseAuth mAuth;
+    private CollectionReference counterCollectionReference;
+    private CounterAdapter counterAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(DashboardActivity.this, AddCounterActivity.class);
+                startActivity(intent);
             }
         });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -71,44 +80,42 @@ public class DashboardActivity extends AppCompatActivity
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-
         // Here work starts
 
         // set db and user
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         user = mAuth.getCurrentUser();
+        counterCollectionReference = db.collection("users").document(user.getUid()).collection("counters");
+        setupRecyclerView();
+    }
 
-        // populate listview using adapter
-        // thanks a tonne to https://youtu.be/kyGVgrLG3KU
-        counterArrayList = new ArrayList<>();
-        countersListAdapter = new CountersListAdapter(counterArrayList);
-//        db = Utils.getInstance().getDb();
-//        user = Utils.getInstance().getUser();
+    private void setupRecyclerView() {
+        Query query = counterCollectionReference;
+        FirestoreRecyclerOptions<Counter> options = new FirestoreRecyclerOptions.Builder<Counter>()
+                .setQuery(query, Counter.class)
+                .build();
 
-        RecyclerView listView = (RecyclerView) findViewById(R.id.list_view);
-        listView.setHasFixedSize(true);
-        listView.setLayoutManager(new LinearLayoutManager(this));
+        counterAdapter = new CounterAdapter(options);
 
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(counterAdapter);
 
-        db.collection("Users").document(user.getUid())
-                .collection("counterArrayList").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+        // TODO show an empty view if recycler view is empty
+    }
 
-                if (e != null) {
-                    Log.e(LOG_TAG, e.getMessage());
-                }
-                for (DocumentChange documentChange : queryDocumentSnapshots.getDocumentChanges()) {
+    @Override
+    protected void onStart() {
+        super.onStart();
+        counterAdapter.startListening();
+    }
 
-                    if (documentChange.getType() == DocumentChange.Type.ADDED) {
-                        Counter counter = documentChange.getDocument().toObject(Counter.class);
-                        counterArrayList.add(counter);
-                        countersListAdapter.notifyDataSetChanged();
-                    }
-                }
-            }
-        });
+    @Override
+    protected void onStop() {
+        super.onStop();
+        counterAdapter.stopListening();
     }
 
     @Override
@@ -138,6 +145,12 @@ public class DashboardActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+
+        else if (id == R.id.action_logout) {
+            Utils.getInstance().signOut();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

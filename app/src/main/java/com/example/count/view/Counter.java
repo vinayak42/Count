@@ -1,65 +1,70 @@
 package com.example.count.view;
 
-import com.google.firebase.Timestamp;
+import java.util.Date;
 
 public final class Counter {
-    private String counterId;
-    private String counterTitle;
-    private long counterValue;
-    private Timestamp creationTime;
-    private Timestamp lastUpdatedTime;
+    private String id;
+    private String title;
+    private int value;
+    private Date creationTimestamp;
+    private Date lastUpdationTimestamp;
     private int goal;
 
     public Counter() {
+        // required for Firestore's automatic data mapping
     }
 
-    public Counter(String counterId, String counterTitle, Timestamp creationTime, Timestamp lastUpdatedTime, int goal) {
-        this.counterId = counterId;
-        this.counterTitle = counterTitle;
-        this.counterValue = 0;
-        this.creationTime = creationTime;
-        this.lastUpdatedTime = lastUpdatedTime;
+    public Counter(String id, String title, Date creationTimestamp, Date lastUpdationTimestamp, int goal) {
+        this.id = id;
+        this.title = title;
+        this.value = 0;
+        this.creationTimestamp = creationTimestamp;
+        this.lastUpdationTimestamp = lastUpdationTimestamp;
         this.goal = goal;
     }
 
-    public void setCounterId(String counterId) {
-        this.counterId = counterId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public void setCounterTitle(String counterTitle) {
-        this.counterTitle = counterTitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public void setCreationTime(Timestamp creationTime) {
-        this.creationTime = creationTime;
+    public void setCreationTimestamp(Date creationTimestamp) {
+        this.creationTimestamp = creationTimestamp;
     }
 
-    public void setLastUpdatedTime(Timestamp lastUpdatedTime) {
-        this.lastUpdatedTime = lastUpdatedTime;
+    public void setLastUpdationTimestamp(Date lastUpdationTimestamp) {
+        this.lastUpdationTimestamp = lastUpdationTimestamp;
     }
 
     public void setGoal(int goal) {
         this.goal = goal;
     }
 
-    public String getCounterId() {
-        return counterId;
+    public String getId() {
+        return id;
     }
 
-    public long getCounterValue() {
-        return counterValue;
+    public int getValue() {
+        return value;
     }
 
-    public String getCounterTitle() {
-        return counterTitle;
+    public void setValue(int value) {
+        this.value = value;
     }
 
-    public Timestamp getCreationTime() {
-        return creationTime;
+    public String getTitle() {
+        return title;
     }
 
-    public Timestamp getLastUpdatedTime() {
-        return lastUpdatedTime;
+    public Date getCreationTimestamp() {
+        return creationTimestamp;
+    }
+
+    public Date getLastUpdationTimestamp() {
+        return lastUpdationTimestamp;
     }
 
     public int getGoal() {
