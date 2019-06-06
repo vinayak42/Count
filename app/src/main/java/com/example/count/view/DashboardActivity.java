@@ -1,5 +1,6 @@
 package com.example.count.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.count.R;
@@ -60,19 +61,17 @@ public class DashboardActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-
-
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(DashboardActivity.this, AddCounterActivity.class);
+                startActivity(intent);
             }
         });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -80,7 +79,6 @@ public class DashboardActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
 
         // Here work starts
 
@@ -90,13 +88,10 @@ public class DashboardActivity extends AppCompatActivity
         user = mAuth.getCurrentUser();
         counterCollectionReference = db.collection("users").document(user.getUid()).collection("counters");
         setupRecyclerView();
-
-
     }
 
     private void setupRecyclerView() {
         Query query = counterCollectionReference;
-
         FirestoreRecyclerOptions<Counter> options = new FirestoreRecyclerOptions.Builder<Counter>()
                 .setQuery(query, Counter.class)
                 .build();
@@ -107,6 +102,8 @@ public class DashboardActivity extends AppCompatActivity
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(counterAdapter);
+
+        // TODO show an empty view if recycler view is empty
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.count.R;
 import com.example.count.model.Utils;
@@ -100,8 +101,11 @@ public class AddCounterActivity extends AppCompatActivity {
                         Map<String, Object> idUpdationdata = new HashMap<>();
                         idUpdationdata.put("id", documentId);
                         documentReference.update(idUpdationdata);
+                        Toast.makeText(AddCounterActivity.this, "Added new counter!", Toast.LENGTH_SHORT).show();
                     }
                 });
+                
+                finish();
             }
         });
     }
