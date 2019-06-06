@@ -21,5 +21,13 @@ public final class CounterViewHolder extends RecyclerView.ViewHolder {
         counterValueTextView = (TextView) itemView.findViewById(R.id.counter_value_text_view);
         creationTimestampTextView = (TextView) itemView.findViewById(R.id.last_updated_text_view);
         lastUpdationTimestampTextView = (TextView) itemView.findViewById(R.id.date_created_text_view);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 }
