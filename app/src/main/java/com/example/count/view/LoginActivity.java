@@ -91,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
 //            Utils.getInstance().setUser(user);
 //            Utils.getInstance().setDb(db);
             Utils.getInstance().init();
+            Utils.getInstance().setGoogleSignInClient(googleSignInClient);
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
         }

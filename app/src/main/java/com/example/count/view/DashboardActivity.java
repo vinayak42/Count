@@ -147,6 +147,12 @@ public class DashboardActivity extends AppCompatActivity
             return true;
         }
 
+        else if (id == R.id.action_logout) {
+            Utils.getInstance().signOut();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
