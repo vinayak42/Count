@@ -14,18 +14,23 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 public final class CounterAdapter extends FirestoreRecyclerAdapter<Counter, CounterAdapter.CounterHolder> {
 
+    TextView emptyTextView;
+
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
      *
      * @param options
+     * @param emptyTextView
      */
-    public CounterAdapter(@NonNull FirestoreRecyclerOptions<Counter> options) {
+    public CounterAdapter(@NonNull FirestoreRecyclerOptions<Counter> options, TextView emptyTextView) {
         super(options);
+        this.emptyTextView = emptyTextView;
     }
 
     @Override
     protected void onBindViewHolder(@NonNull CounterHolder counterHolder, int i, @NonNull Counter counter) {
+        // TODO provide a simpler date format using SimpleDateFormat
         counterHolder.counterTitleTextView.setText(counter.getTitle());
         counterHolder.counterValueTextView.setText(String.valueOf(counter.getValue()));
         counterHolder.creationTimestampTextView.setText(counter.getCreationTimestamp().toString());
@@ -37,6 +42,12 @@ public final class CounterAdapter extends FirestoreRecyclerAdapter<Counter, Coun
     public CounterHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.counter_list_item, parent, false);
         return new CounterHolder(view);
+    }
+
+    @Override
+    public void onDataChanged() {
+        // for empty view
+        emptyTextView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
     }
 
     class CounterHolder extends RecyclerView.ViewHolder {

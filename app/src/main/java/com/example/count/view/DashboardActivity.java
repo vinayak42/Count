@@ -5,15 +5,11 @@ import android.os.Bundle;
 
 import com.example.count.R;
 import com.example.count.model.Utils;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
-import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -23,12 +19,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -38,13 +30,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
-import android.view.ViewGroup;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-
-import java.util.ArrayList;
-
-import javax.annotation.Nullable;
+import android.widget.TextView;
 
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -55,6 +41,7 @@ public class DashboardActivity extends AppCompatActivity
     private FirebaseAuth mAuth;
     private CollectionReference counterCollectionReference;
     private CounterAdapter counterAdapter;
+    private TextView emptyTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +49,7 @@ public class DashboardActivity extends AppCompatActivity
         setContentView(R.layout.activity_dashboard);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+        emptyTextView = (TextView) findViewById(R.id.empty_text_view);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +84,7 @@ public class DashboardActivity extends AppCompatActivity
                 .setQuery(query, Counter.class)
                 .build();
 
-        counterAdapter = new CounterAdapter(options);
+        counterAdapter = new CounterAdapter(options, emptyTextView);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_view);
         recyclerView.setHasFixedSize(true);
