@@ -4,12 +4,15 @@ import android.os.Bundle;
 
 import com.example.count.R;
 import com.example.count.model.Utils;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import android.util.Log;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -18,10 +21,12 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -32,6 +37,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
+import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -43,16 +49,20 @@ public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String LOG_TAG = "DashboardTag";
-    private ArrayList<Counter> counterArrayList;
     private FirebaseFirestore db;
     private FirebaseUser user;
-    private CountersListAdapter countersListAdapter;
     private FirebaseAuth mAuth;
+    private CollectionReference counterCollectionReference;
+    private CounterAdapter counterAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -78,7 +88,37 @@ public class DashboardActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         user = mAuth.getCurrentUser();
+        counterCollectionReference = db.collection("users").document(user.getUid()).collection("counters");
+        setupRecyclerView();
 
+
+    }
+
+    private void setupRecyclerView() {
+        Query query = counterCollectionReference;
+
+        FirestoreRecyclerOptions<Counter> options = new FirestoreRecyclerOptions.Builder<Counter>()
+                .setQuery(query, Counter.class)
+                .build();
+
+        counterAdapter = new CounterAdapter(options);
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(counterAdapter);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        counterAdapter.startListening();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        counterAdapter.stopListening();
     }
 
     @Override

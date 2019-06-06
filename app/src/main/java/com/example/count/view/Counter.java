@@ -11,6 +11,7 @@ public final class Counter {
     private int goal;
 
     public Counter() {
+        // required for Firestore's automatic data mapping
     }
 
     public Counter(String id, String title, Date creationTimestamp, Date lastUpdationTimestamp, int goal) {
