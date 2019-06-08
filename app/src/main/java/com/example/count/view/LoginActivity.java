@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             Utils.getInstance().setGoogleSignInClient(googleSignInClient);
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
+            finish();
         }
         
         else {
@@ -141,6 +142,7 @@ public class LoginActivity extends AppCompatActivity {
             verifyDocumentOnFirebase();
             Intent intent = new Intent(this, DashboardActivity.class);
             startActivity(intent);
+            finish();
         }
     }
 
