@@ -52,9 +52,6 @@ public class AddCounterActivity extends AppCompatActivity {
                 valid = false;
             }
         }
-
-
-
         return valid;
     }
 
