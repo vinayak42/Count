@@ -37,6 +37,27 @@ public class AddCounterActivity extends AppCompatActivity {
     FirebaseUser user;
     boolean customGoalRequired;
 
+    private boolean inputValidator() {
+
+        boolean valid = true;
+
+        if (TextUtils.isEmpty(counterTitleEt.getText())) {
+            Toast.makeText(this, "Fill in a title name!", Toast.LENGTH_SHORT).show();
+            valid = false;
+        }
+
+        if (setGoal.isChecked()) {
+            if (TextUtils.isEmpty(goalValueEt.getText())) {
+                Toast.makeText(this, "Enter a number for goal or uncheck the option", Toast.LENGTH_SHORT).show();
+                valid = false;
+            }
+        }
+
+
+
+        return valid;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +90,11 @@ public class AddCounterActivity extends AppCompatActivity {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (!inputValidator()) {
+                    return;
+                }
+
                 // create a new counter
                 String counterTitle = counterTitleEt.getText().toString().trim();
                 int counterValue = 0;
