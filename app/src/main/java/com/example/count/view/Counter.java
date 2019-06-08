@@ -1,8 +1,9 @@
 package com.example.count.view;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public final class Counter {
+public final class Counter implements Serializable {
     private String id;
     private String title;
     private int value;

@@ -19,6 +19,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -76,6 +77,17 @@ public class DashboardActivity extends AppCompatActivity
         user = mAuth.getCurrentUser();
         counterCollectionReference = db.collection("users").document(user.getUid()).collection("counters");
         setupRecyclerView();
+
+        counterAdapter.setOnItemClickListener(new CounterAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Intent intent = new Intent(DashboardActivity.this, CounterActivity.class);
+                Counter counter = documentSnapshot.toObject(Counter.class);
+                intent.putExtra("counterId", documentSnapshot.getId());
+                intent.putExtra("counter", counter);
+                startActivity(intent);
+            }
+        });
     }
 
     private void setupRecyclerView() {

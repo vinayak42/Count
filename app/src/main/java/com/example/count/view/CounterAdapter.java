@@ -1,5 +1,6 @@
 package com.example.count.view;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.count.R;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public final class CounterAdapter extends FirestoreRecyclerAdapter<Counter, CounterAdapter.CounterHolder> {
 
-    TextView emptyTextView;
+    private TextView emptyTextView;
+    private OnItemClickListener listener;
 
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -52,6 +55,7 @@ public final class CounterAdapter extends FirestoreRecyclerAdapter<Counter, Coun
 
     class CounterHolder extends RecyclerView.ViewHolder {
 
+        View itemView;
         TextView counterTitleTextView;
         TextView counterValueTextView;
         TextView creationTimestampTextView;
@@ -59,10 +63,30 @@ public final class CounterAdapter extends FirestoreRecyclerAdapter<Counter, Coun
 
         public CounterHolder(@NonNull View itemView) {
             super(itemView);
+            this.itemView = itemView;
             counterTitleTextView = (TextView) itemView.findViewById(R.id.counter_title_text_view);
             counterValueTextView = (TextView) itemView.findViewById(R.id.counter_value_text_view);
             creationTimestampTextView = (TextView) itemView.findViewById(R.id.last_updated_text_view);
             lastUpdationTimestampTextView = (TextView) itemView.findViewById(R.id.date_created_text_view);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && listener != null) {
+                        listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                    }
+                }
+            });
+
         }
     }
+
+    public interface OnItemClickListener {
+        public abstract void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    }
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 }
+
