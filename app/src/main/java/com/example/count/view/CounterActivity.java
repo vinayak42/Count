@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.example.count.R;
 import com.example.count.model.Utils;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -27,6 +28,7 @@ public class CounterActivity extends AppCompatActivity {
     private DocumentReference counterReference;
     private ImageView incrementImageView;
     private ImageView decrementImageView;
+    private ImageView deleteImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class CounterActivity extends AppCompatActivity {
         decrementButton = (Button) findViewById(R.id.counter_activity_decrement_button);
         incrementImageView = (ImageView) findViewById(R.id.incrementImageView);
         decrementImageView = (ImageView) findViewById(R.id.decrementImageView);
+        deleteImageView = (ImageView) findViewById(R.id.deleteImageView);
 
         counter = (Counter) getIntent().getExtras().get("counter");
 
@@ -80,6 +83,18 @@ public class CounterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 decrement();
+            }
+        });
+
+        deleteImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                counterReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        finish();
+                    }
+                });
             }
         });
 
