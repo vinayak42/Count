@@ -12,20 +12,23 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/roboto"
         android:text="@string/new_counter_message"
-        android:textSize="24sp"
+        android:textColor="@color/titleTextColor"
+        android:textSize="@dimen/title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/counter_title_text_input_layout"
-        android:layout_width="395dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="128dp"
+        android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/new_counter_header"
         app:layout_constraintTop_toBottomOf="@+id/new_counter_header">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -37,13 +40,13 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/counter_initial_value_text_input_layout"
-        android:layout_width="395dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/counter_title_text_input_layout"
         app:layout_constraintTop_toBottomOf="@+id/counter_title_text_input_layout">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -58,19 +61,19 @@
         android:id="@+id/set_goal_cb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:text="Set goal?"
         app:layout_constraintBottom_toBottomOf="@+id/goal_value_text_input_layout"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/counter_initial_value_text_input_layout" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/goal_value_text_input_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/set_goal_cb"
         app:layout_constraintTop_toBottomOf="@+id/counter_initial_value_text_input_layout">
@@ -89,6 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
+        android:background="@drawable/round_button_background"
         android:text="Button"
         app:layout_constraintEnd_toEndOf="@+id/goal_value_text_input_layout"
         app:layout_constraintTop_toBottomOf="@+id/goal_value_text_input_layout"
