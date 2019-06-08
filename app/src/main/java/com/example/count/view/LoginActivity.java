@@ -74,17 +74,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.sign_out_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.sign_out_button:
-                        signOut();
-                        break;
-                }
-            }
-        });
-
         FirebaseUser currentUser = mAuth.getCurrentUser();
         
         if (currentUser != null) {
