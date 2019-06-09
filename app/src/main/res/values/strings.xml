@@ -36,4 +36,5 @@
     <string name="counter_initial_value_hint">Initial value for counter, by default 0</string>
     <string name="action_logout">Logout</string>
     <string name="empty_view_text">It feels so empty in here, maybe add some counters?</string>
+    <string name="menu_settings">Settings</string>
 </resources>
