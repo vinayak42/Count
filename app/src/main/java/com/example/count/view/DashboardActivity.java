@@ -22,6 +22,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.squareup.picasso.Picasso;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -33,6 +34,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 // TODO need to tap back twice to close Dashboard activity, fix it
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -44,6 +49,9 @@ public class DashboardActivity extends AppCompatActivity
     private CollectionReference counterCollectionReference;
     private CounterAdapter counterAdapter;
     private TextView emptyTextView;
+    private CircleImageView profileImageView;
+    private TextView nameTextView;
+    private TextView emailTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +99,16 @@ public class DashboardActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+
+        View headerLayout = navigationView.getHeaderView(0);
+
+        profileImageView = (CircleImageView) headerLayout.findViewById(R.id.profile_image_view);
+        nameTextView = (TextView) headerLayout.findViewById(R.id.dashboard_name_text_view);
+        emailTextView = (TextView) headerLayout.findViewById(R.id.dashboard_email_text_view);
+
+        Picasso.get().load(user.getPhotoUrl().toString()).into(profileImageView);
+        nameTextView.setText(user.getDisplayName());
+        emailTextView.setText(user.getEmail());
     }
 
     private void setupRecyclerView() {
@@ -110,7 +128,6 @@ public class DashboardActivity extends AppCompatActivity
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        // TODO show an empty view if recycler view is empty
     }
 
     @Override
