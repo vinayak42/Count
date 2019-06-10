@@ -1,5 +1,7 @@
 package com.example.count.view;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -7,6 +9,7 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Dao
 public interface CounterDao {
@@ -14,8 +17,8 @@ public interface CounterDao {
     @Insert
     public void insert(Counter counter);
 
-    @Query("SELECT * FROM Counter ORDER BY lastUpdationTimestamp")
-    ArrayList<Counter> getAllCounters();
+    @Query("SELECT * FROM Counter ORDER BY lastUpdationTimestamp DESC")
+    MutableLiveData<List<Counter>> getAllCounters();
 
     @Delete
     public void delete(Counter counter);
