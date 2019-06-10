@@ -1,14 +1,31 @@
 package com.example.count.view;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
+
 import java.io.Serializable;
 import java.util.Date;
 
+@Entity
 public final class Counter implements Serializable {
+
+    @PrimaryKey(autoGenerate = false)
     private String id;
+
     private String title;
     private int value;
+
+    @ColumnInfo(name = "createdTimestamp")
+    @TypeConverters({TimestampConverter.class})
     private Date creationTimestamp;
+
+    @ColumnInfo(name = "lastUpdationTimestamp")
+    @TypeConverters({TimestampConverter.class})
     private Date lastUpdationTimestamp;
+
     private int goal;
 
     public Counter() {
