@@ -25,6 +25,11 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
 //    private OnItemClickListener listener;
     private ArrayList<Counter> counterArrayList;
 
+    public CounterAdapter(TextView emptyTextView, ArrayList<Counter> counterArrayList) {
+        this.emptyTextView = emptyTextView;
+        this.counterArrayList = counterArrayList;
+    }
+
     @NonNull
     @Override
     public CounterHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -45,6 +50,12 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
     @Override
     public int getItemCount() {
         return counterArrayList.size();
+    }
+
+    public void addCounter(Counter counter)
+    {
+        counterArrayList.add(counter);
+        notifyDataSetChanged();
     }
 
     class CounterHolder extends RecyclerView.ViewHolder {
