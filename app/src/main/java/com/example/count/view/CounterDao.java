@@ -25,4 +25,7 @@ public interface CounterDao {
 
     @Update
     public void update(Counter counter);
+
+    @Query("DELETE FROM Counter")
+    public void deleteAll();
 }

@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.count.view.Counter;
 import com.example.count.view.LoginActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -13,9 +14,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+
 public class Utils {
 
     private static final Utils ourInstance = new Utils();
+    private ArrayList<Counter> counterArrayList;
 
     public static Utils getInstance() {
         return ourInstance;
@@ -32,6 +36,12 @@ public class Utils {
     public void setGoogleSignInClient(GoogleSignInClient googleSignInClient) {
         this.googleSignInClient = googleSignInClient;
     }
+
+    public void setCounterArrayList(ArrayList<Counter> counterArrayList) {
+        this.counterArrayList = counterArrayList;
+    }
+
+
 
     public FirebaseFirestore getDb() {
         return db;
@@ -58,5 +68,9 @@ public class Utils {
     public void signOut() {
         googleSignInClient.signOut();
         FirebaseAuth.getInstance().signOut();
+    }
+
+    public ArrayList<Counter> getCounterArrayList() {
+        return this.counterArrayList;
     }
 }

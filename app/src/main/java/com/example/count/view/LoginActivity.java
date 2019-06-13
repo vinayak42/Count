@@ -25,11 +25,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Kindly login to continue", Toast.LENGTH_SHORT).show();
         }
         
-        updateUI(currentUser);
+//        updateUI(currentUser);
     }
 
     @Override
@@ -199,6 +202,7 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(LOG_TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+                            setupDatabase();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -207,5 +211,20 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void setupDatabase() {
+        db.collection("users").document(user.getUid()).collection("counters")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                ArrayList<Counter> counterArrayList = Utils.getInstance().getCounterArrayList();
+                counterArrayList = new ArrayList<>();
+                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                    Counter counter = documentSnapshot.toObject(Counter.class);
+                    counterArrayList.add(counter);
+                }
+            }
+        });
     }
 }

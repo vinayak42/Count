@@ -36,6 +36,8 @@ import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 // TODO need to tap back twice to close Dashboard activity, fix it
@@ -52,6 +54,7 @@ public class DashboardActivity extends AppCompatActivity
     private CircleImageView profileImageView;
     private TextView nameTextView;
     private TextView emailTextView;
+    private ArrayList<Counter> counterArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,20 +88,22 @@ public class DashboardActivity extends AppCompatActivity
         db = FirebaseFirestore.getInstance();
         user = mAuth.getCurrentUser();
         counterCollectionReference = db.collection("users").document(user.getUid()).collection("counters");
+        counterArrayList = Utils.getInstance().getCounterArrayList();
         setupRecyclerView();
 
         getSupportActionBar().setTitle(user.getDisplayName().split(" ")[0] + "'s Dashboard");
 
-        counterAdapter.setOnItemClickListener(new CounterAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                Intent intent = new Intent(DashboardActivity.this, CounterActivity.class);
-                Counter counter = documentSnapshot.toObject(Counter.class);
-                intent.putExtra("counterId", documentSnapshot.getId());
-                intent.putExtra("counter", counter);
-                startActivity(intent);
-            }
-        });
+        // TODO add an onItemClickListener
+//        counterAdapter.setOnItemClickListener(new CounterAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+//                Intent intent = new Intent(DashboardActivity.this, CounterActivity.class);
+//                Counter counter = documentSnapshot.toObject(Counter.class);
+//                intent.putExtra("counterId", documentSnapshot.getId());
+//                intent.putExtra("counter", counter);
+//                startActivity(intent);
+//            }
+//        });
 
         View headerLayout = navigationView.getHeaderView(0);
 
@@ -117,7 +122,7 @@ public class DashboardActivity extends AppCompatActivity
                 .setQuery(query, Counter.class)
                 .build();
 
-        counterAdapter = new CounterAdapter(options, emptyTextView);
+        counterAdapter = new CounterAdapter(emptyTextView, counterArrayList);
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_view);
         recyclerView.setHasFixedSize(true);
@@ -130,17 +135,18 @@ public class DashboardActivity extends AppCompatActivity
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        counterAdapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        counterAdapter.stopListening();
-    }
+    // TODO remove if useless
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        counterAdapter.startListening();
+//    }
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        counterAdapter.stopListening();
+//    }
 
     @Override
     public void onBackPressed() {
