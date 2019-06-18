@@ -60,6 +60,7 @@ public class DashboardActivity extends AppCompatActivity
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = findViewById(R.id.toolbar);
         emptyTextView = (TextView) findViewById(R.id.empty_text_view);
+        emptyTextView.setVisibility(View.GONE);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
