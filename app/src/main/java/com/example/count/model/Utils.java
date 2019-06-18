@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class Utils {
 
     private static final Utils ourInstance = new Utils();
-    private ArrayList<Counter> counterArrayList;
+//    private ArrayList<Counter> counterArrayList;
 
     public static Utils getInstance() {
         return ourInstance;
@@ -37,9 +37,9 @@ public class Utils {
         this.googleSignInClient = googleSignInClient;
     }
 
-    public void setCounterArrayList(ArrayList<Counter> counterArrayList) {
-        this.counterArrayList = counterArrayList;
-    }
+//    public void setCounterArrayList(ArrayList<Counter> counterArrayList) {
+//        this.counterArrayList = counterArrayList;
+//    }
 
 
 
@@ -70,7 +70,7 @@ public class Utils {
         FirebaseAuth.getInstance().signOut();
     }
 
-    public ArrayList<Counter> getCounterArrayList() {
-        return this.counterArrayList;
-    }
+//    public ArrayList<Counter> getCounterArrayList() {
+//        return this.counterArrayList;
+//    }
 }

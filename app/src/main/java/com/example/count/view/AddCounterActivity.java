@@ -36,6 +36,7 @@ public class AddCounterActivity extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseUser user;
     boolean customGoalRequired;
+    private CounterRepository counterRepository;
 
     private boolean inputValidator() {
 
@@ -69,6 +70,7 @@ public class AddCounterActivity extends AppCompatActivity {
        db = Utils.getInstance().getDb();
        user = Utils.getInstance().getUser();
        submitButton = (Button) findViewById(R.id.submit_button);
+       counterRepository = new CounterRepository(getApplication());
 
         goalValueTil.setVisibility(View.INVISIBLE);
 
@@ -93,21 +95,23 @@ public class AddCounterActivity extends AppCompatActivity {
                 }
 
                 // create a new counter
-                String counterTitle = counterTitleEt.getText().toString().trim();
+                final String counterTitle = counterTitleEt.getText().toString().trim();
                 int counterValue = 0;
 
                 if (!TextUtils.isEmpty(counterInitialValueEt.getText().toString().trim())) {
                     counterValue = Integer.parseInt(counterInitialValueEt.getText().toString().trim());
                 }
 
-                Timestamp creationTime = new Timestamp(new Date());
-                Timestamp lastUpdationTime = new Timestamp(new Date());
+                final Timestamp creationTime = new Timestamp(new Date());
+                final Timestamp lastUpdationTime = new Timestamp(new Date());
 
                 int goal = -1;
 
                 if (setGoal.isChecked()) {
                     goal = Integer.parseInt(goalValueEt.getText().toString().trim());
                 }
+
+                final int goal2 = goal;
 
                 Map<String, Object> data = new HashMap<>();
                 data.put("title", counterTitle);
@@ -124,6 +128,8 @@ public class AddCounterActivity extends AppCompatActivity {
                         Map<String, Object> idUpdationdata = new HashMap<>();
                         idUpdationdata.put("id", documentId);
                         documentReference.update(idUpdationdata);
+                        Counter counter = new Counter(documentId, counterTitle, creationTime.toDate(), lastUpdationTime.toDate(), goal2);
+                        counterRepository.insert(counter);
                         Toast.makeText(AddCounterActivity.this, "Added new counter!", Toast.LENGTH_SHORT).show();
                     }
                 });

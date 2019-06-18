@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import com.example.count.R;
 import com.example.count.model.Utils;
@@ -47,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 //    private DatabaseReference mDatabase;
     private FirebaseUser user;
     private FirebaseFirestore db;
+    private CounterRepository counterRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 //        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         db = FirebaseFirestore.getInstance();
+//        Utils.getInstance().setCounterArrayList(new ArrayList<Counter>());
 
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        counterRepository = new CounterRepository(getApplication());
         
         if (currentUser != null) {
 //            Utils.getInstance().setUser(user);
@@ -201,7 +205,7 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(LOG_TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            user = mAuth.getCurrentUser();
                             setupDatabase();
                             updateUI(user);
                         } else {
@@ -218,11 +222,19 @@ public class LoginActivity extends AppCompatActivity {
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                ArrayList<Counter> counterArrayList = Utils.getInstance().getCounterArrayList();
-                counterArrayList = new ArrayList<>();
-                for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
-                    Counter counter = documentSnapshot.toObject(Counter.class);
-                    counterArrayList.add(counter);
+//                ArrayList<Counter> counterArrayList = Utils.getInstance().getCounterArrayList();
+
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        Counter counter = documentSnapshot.toObject(Counter.class);
+                        counterRepository.insert(counter);
+                        Log.v("Counter_debug", "Added: " + counter);
+//                    CounterRoomDatabase database = Room.databaseBuilder(getApplicationContext(), CounterRoomDatabase.class, "counter_database").build();
+//                    database.counterDao().insert(counter);
+                    }
+                }
+                else {
+                    Log.e("Counter_debug", task.getException().getMessage());
                 }
             }
         });

@@ -1,5 +1,6 @@
 package com.example.count.view;
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -10,9 +11,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public final class Counter implements Serializable {
+public class Counter implements Serializable {
 
     @PrimaryKey(autoGenerate = false)
+    @NonNull
     private String id;
 
     private String title;
@@ -87,5 +89,17 @@ public final class Counter implements Serializable {
 
     public int getGoal() {
         return goal;
+    }
+
+    @Override
+    public String toString() {
+        return "Counter{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", value=" + value +
+                ", creationTimestamp=" + creationTimestamp +
+                ", lastUpdationTimestamp=" + lastUpdationTimestamp +
+                ", goal=" + goal +
+                '}';
     }
 }

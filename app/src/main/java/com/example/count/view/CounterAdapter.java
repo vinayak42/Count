@@ -49,6 +49,9 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
 
     @Override
     public int getItemCount() {
+        if(counterArrayList == null) {
+            return 0;
+        }
         return counterArrayList.size();
     }
 
@@ -56,6 +59,10 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
     {
         counterArrayList.add(counter);
         notifyDataSetChanged();
+    }
+
+    public ArrayList<Counter> getCounterArrayList() {
+        return counterArrayList;
     }
 
     class CounterHolder extends RecyclerView.ViewHolder {
@@ -86,6 +93,10 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
 //            });
 
         }
+    }
+
+    public void setCounterArrayList(ArrayList<Counter> counterArrayList) {
+        this.counterArrayList = counterArrayList;
     }
 
     //TODO remove when it gets really useless

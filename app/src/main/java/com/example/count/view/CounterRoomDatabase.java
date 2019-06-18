@@ -19,14 +19,14 @@ public abstract class CounterRoomDatabase extends RoomDatabase {
 
     private static CounterRoomDatabase instance;
 
-    private static Callback roomDatabaseCallback = new Callback() {
-        // Reference: https://codelabs.developers.google.com/codelabs/android-room-with-a-view/#11
-        @Override
-        public void onOpen(@NonNull SupportSQLiteDatabase db) {
-            super.onOpen(db);
-            new PopulateDbAsync(instance).execute();
-        }
-    };
+//    private static Callback roomDatabaseCallback = new Callback() {
+//        // Reference: https://codelabs.developers.google.com/codelabs/android-room-with-a-view/#11
+//        @Override
+//        public void onOpen(@NonNull SupportSQLiteDatabase db) {
+//            super.onOpen(db);
+//            new PopulateDbAsync(instance).execute();
+//        }
+//    };
 
     public static CounterRoomDatabase getInstance(final Context context) {
         if (instance == null) {
@@ -44,6 +44,11 @@ public abstract class CounterRoomDatabase extends RoomDatabase {
 
     public abstract CounterDao counterDao();
 
+    /*
+    This class is useless. All it will do is whenever the database is opened, it will delete all of it
+    and reload the data from the arraylist passed to it. This is dumb.
+    PS, however, just in order to call the method in it, add .addCallback to the above build() sequence.
+     */
     private static class PopulateDbAsync extends AsyncTask<ArrayList<Counter>, Void, Void> {
 
         private final CounterDao counterDao;

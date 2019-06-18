@@ -3,7 +3,7 @@ package com.example.count.view;
 import android.app.Application;
 import android.os.AsyncTask;
 
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
@@ -12,7 +12,7 @@ public final class CounterRepository {
     // Reference: https://codelabs.developers.google.com/codelabs/android-room-with-a-view/#7
 
     private CounterDao counterDao;
-    private MutableLiveData<List<Counter>> allCounters;
+    private LiveData<List<Counter>> allCounters;
 
     public CounterRepository(Application application) {
         CounterRoomDatabase rdb = CounterRoomDatabase.getInstance(application);
@@ -20,7 +20,7 @@ public final class CounterRepository {
         allCounters = counterDao.getAllCounters();
     }
 
-    public MutableLiveData<List<Counter>> getAllCounters() {
+    public LiveData<List<Counter>> getAllCounters() {
         return allCounters;
     }
 

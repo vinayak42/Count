@@ -10,6 +10,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 
@@ -28,6 +29,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +41,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -45,6 +50,7 @@ public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String LOG_TAG = "DashboardTag";
+    private static final int NEW_COUNTER_ACTIVITY_REQUEST_CODE = 1;
     private FirebaseFirestore db;
     private FirebaseUser user;
     private FirebaseAuth mAuth;
@@ -55,6 +61,7 @@ public class DashboardActivity extends AppCompatActivity
     private TextView nameTextView;
     private TextView emailTextView;
     private ArrayList<Counter> counterArrayList;
+    private CounterViewModel counterViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +76,7 @@ public class DashboardActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DashboardActivity.this, AddCounterActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, NEW_COUNTER_ACTIVITY_REQUEST_CODE);
             }
         });
 
@@ -83,13 +90,23 @@ public class DashboardActivity extends AppCompatActivity
 
         // Here work starts
 
+        counterViewModel = ViewModelProviders.of(this).get(CounterViewModel.class);
+        counterViewModel.getAllCounters().observe(this, new Observer<List<Counter>>() {
+            @Override
+            public void onChanged(List<Counter> counters) {
+                // isnt this same as changing the counterArrayList in this file?
+                counterAdapter.setCounterArrayList(new ArrayList<Counter>(counters));
+            }
+        });
+
         // set db and user
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         user = mAuth.getCurrentUser();
         counterCollectionReference = db.collection("users").document(user.getUid()).collection("counters");
-        counterArrayList = Utils.getInstance().getCounterArrayList();
+//        counterArrayList = Utils.getInstance().getCounterArrayList();
         setupRecyclerView();
+        counterArrayList = counterAdapter.getCounterArrayList();
 
         getSupportActionBar().setTitle(user.getDisplayName().split(" ")[0] + "'s Dashboard");
 
@@ -200,5 +217,16 @@ public class DashboardActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    // Seems useless because we are already observing the data through counterViewModel
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == NEW_COUNTER_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            Counter counter = (Counter) data.getExtras().get("counter");
+            counterViewModel.insert(counter);
+        }
     }
 }
