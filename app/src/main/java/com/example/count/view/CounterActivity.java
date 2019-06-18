@@ -25,15 +25,17 @@ public class CounterActivity extends AppCompatActivity {
     private TextView titleTextView, valueTextView, creationDateTextView, lastUpdationTextView;
     private Button incrementButton, decrementButton;
     private Counter counter;
-    private DocumentReference counterReference;
+//    private DocumentReference counterReference;
     private ImageView incrementImageView;
     private ImageView decrementImageView;
     private ImageView deleteImageView;
+    private CounterRepository counterRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_counter);
+        counterRepository = new CounterRepository(getApplication());
 
         titleTextView = (TextView) findViewById(R.id.counter_activity_title);
         valueTextView = (TextView) findViewById(R.id.counter_activity_value);
@@ -53,10 +55,8 @@ public class CounterActivity extends AppCompatActivity {
         lastUpdationTextView.setText(counter.getLastUpdationTimestamp().toString());
 
         final String counterId = (String) getIntent().getExtras().get("counterId");
-        FirebaseFirestore db = Utils.getInstance().getDb();
-        FirebaseUser user = Utils.getInstance().getUser();
 
-        counterReference = db.collection("users").document(user.getUid()).collection("counters").document(counterId);
+//        counterReference = db.collection("users").document(user.getUid()).collection("counters").document(counterId);
 
         incrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,30 +89,23 @@ public class CounterActivity extends AppCompatActivity {
         deleteImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                counterReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        finish();
-                    }
-                });
+                // TODO do wrt Firebase
+//                counterRepository.delete(counter);
+//                finish();
             }
         });
 
     }
 
     private void increment() {
-        Map<String, Object> newValue = new HashMap<>();
-        newValue.put("value", counter.getValue() + 1);
-        counterReference.update(newValue);
         valueTextView.setText(String.valueOf(counter.getValue() + 1));
         counter.setValue(counter.getValue() + 1);
+        counterRepository.update(counter);
     }
 
     private void decrement() {
-        Map<String, Object> newValue = new HashMap<>();
-        newValue.put("value", counter.getValue() - 1);
-        counterReference.update(newValue);
         valueTextView.setText(String.valueOf(counter.getValue() - 1));
         counter.setValue(counter.getValue() - 1);
+        counterRepository.update(counter);
     }
 }

@@ -101,6 +101,17 @@ public class DashboardActivity extends AppCompatActivity
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         counterAdapter = new CounterAdapter();
+
+        counterAdapter.setOnItemClickListener(new CounterAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent(DashboardActivity.this, CounterActivity.class);
+                Counter counter = counterAdapter.getCounterList().get(position);
+                intent.putExtra("counter", counter);
+                startActivity(intent);
+            }
+        });
+
         recyclerView.setAdapter(counterAdapter);
 
         counterViewModel = ViewModelProviders.of(this).get(CounterViewModel.class);

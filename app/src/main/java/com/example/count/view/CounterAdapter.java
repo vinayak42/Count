@@ -15,6 +15,16 @@ import java.util.List;
 
 public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterHolder>{
 
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     private TextView emptyTextView;
     // TODO remove this if it gets really useless
 //    private OnItemClickListener listener;
@@ -27,7 +37,7 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
     @Override
     public CounterHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.counter_list_item, parent, false);
-        return new CounterHolder(view);
+        return new CounterHolder(view, onItemClickListener);
     }
 
     @Override
@@ -65,13 +75,25 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
         TextView creationTimestampTextView;
         TextView lastUpdationTimestampTextView;
 
-        public CounterHolder(@NonNull View itemView) {
+        public CounterHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             this.itemView = itemView;
             counterTitleTextView = (TextView) itemView.findViewById(R.id.counter_title_text_view);
             counterValueTextView = (TextView) itemView.findViewById(R.id.counter_value_text_view);
             creationTimestampTextView = (TextView) itemView.findViewById(R.id.last_updated_text_view);
             lastUpdationTimestampTextView = (TextView) itemView.findViewById(R.id.date_created_text_view);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
+                    }
+                }
+            });
 
             //TODO replace with a suitable method
 //            itemView.setOnClickListener(new View.OnClickListener() {
