@@ -20,8 +20,7 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
 //    private OnItemClickListener listener;
     private List<Counter> counterList = new ArrayList<>();
 
-    public CounterAdapter(TextView emptyTextView) {
-        this.emptyTextView = emptyTextView;
+    public CounterAdapter() {
     }
 
     @NonNull
@@ -40,6 +39,8 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
         counterHolder.creationTimestampTextView.setText(counter.getCreationTimestamp().toString());
         counterHolder.lastUpdationTimestampTextView.setText(counter.getLastUpdationTimestamp().toString());
     }
+
+
 
     @Override
     public int getItemCount() {
