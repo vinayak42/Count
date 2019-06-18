@@ -30,12 +30,17 @@ public class CounterActivity extends AppCompatActivity {
     private ImageView decrementImageView;
     private ImageView deleteImageView;
     private CounterRepository counterRepository;
+    private DocumentReference counterReference;
+    private FirebaseFirestore db;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_counter);
         counterRepository = new CounterRepository(getApplication());
+        db = FirebaseFirestore.getInstance();
+        user = Utils.getInstance().getUser();
 
         titleTextView = (TextView) findViewById(R.id.counter_activity_title);
         valueTextView = (TextView) findViewById(R.id.counter_activity_value);
@@ -54,9 +59,9 @@ public class CounterActivity extends AppCompatActivity {
         creationDateTextView.setText(counter.getCreationTimestamp().toString());
         lastUpdationTextView.setText(counter.getLastUpdationTimestamp().toString());
 
-        final String counterId = (String) getIntent().getExtras().get("counterId");
+        final String counterId = counter.getId();
 
-//        counterReference = db.collection("users").document(user.getUid()).collection("counters").document(counterId);
+        counterReference = db.collection("users").document(user.getUid()).collection("counters").document(counterId);
 
         incrementButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,9 +94,9 @@ public class CounterActivity extends AppCompatActivity {
         deleteImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO do wrt Firebase
-//                counterRepository.delete(counter);
-//                finish();
+                counterRepository.delete(counter);
+                counterReference.delete();
+                finish();
             }
         });
 

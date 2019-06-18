@@ -86,9 +86,10 @@ public class LoginActivity extends AppCompatActivity {
         if (currentUser != null) {
 //            Utils.getInstance().setUser(user);
 //            Utils.getInstance().setDb(db);
-            Utils.getInstance().init();
+//            Utils.getInstance().init();
             Utils.getInstance().setGoogleSignInClient(googleSignInClient);
             Intent intent = new Intent(this, DashboardActivity.class);
+            Utils.getInstance().init();
             startActivity(intent);
             finish();
         }
@@ -148,6 +149,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "[Firebase] Login detected: " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
             verifyDocumentOnFirebase();
             Intent intent = new Intent(this, DashboardActivity.class);
+            Utils.getInstance().init();
             startActivity(intent);
             finish();
         }
