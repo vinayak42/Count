@@ -9,13 +9,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.count.R;
 import com.example.count.model.Utils;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseUser;
@@ -61,7 +59,7 @@ public class AddCounterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_counter);
 
-        Utils.getInstance().init();
+        Utils.getInstance().init(getApplication());
        counterTitleEt = ((TextInputLayout)findViewById(R.id.counter_title_text_input_layout)).getEditText();
        counterInitialValueEt = ((TextInputLayout)findViewById(R.id.counter_initial_value_text_input_layout)).getEditText();
        goalValueEt = ((TextInputLayout) findViewById(R.id.goal_value_text_input_layout)).getEditText();

@@ -36,6 +36,8 @@ public final class CounterRepository {
         new updateAsyncTask(counterDao).execute(counter);
     }
 
+    public void deleteAllCounters() { new deleteAllCountersAsyncTask(counterDao).execute(); }
+
     private static class insertAsyncTask extends AsyncTask<Counter, Void, Void> {
         private CounterDao asyncTaskDao;
 
@@ -77,6 +79,21 @@ public final class CounterRepository {
         @Override
         protected Void doInBackground(Counter... counters) {
             asyncTaskDao.update(counters[0]);
+            return null;
+        }
+    }
+
+    private class deleteAllCountersAsyncTask extends AsyncTask<Void, Void, Void>{
+
+        private CounterDao asyncTaskDao;
+
+        public deleteAllCountersAsyncTask(CounterDao asyncTaskDao) {
+            this.asyncTaskDao = asyncTaskDao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            asyncTaskDao.deleteAll();
             return null;
         }
     }

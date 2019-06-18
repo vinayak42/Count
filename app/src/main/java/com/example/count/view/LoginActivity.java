@@ -9,7 +9,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import com.example.count.R;
 import com.example.count.model.Utils;
@@ -29,11 +28,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -89,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 //            Utils.getInstance().init();
             Utils.getInstance().setGoogleSignInClient(googleSignInClient);
             Intent intent = new Intent(this, DashboardActivity.class);
-            Utils.getInstance().init();
+            Utils.getInstance().init(getApplication());
             startActivity(intent);
             finish();
         }
@@ -149,7 +146,8 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "[Firebase] Login detected: " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
             verifyDocumentOnFirebase();
             Intent intent = new Intent(this, DashboardActivity.class);
-            Utils.getInstance().init();
+            Utils.getInstance().init(getApplication());
+            Utils.getInstance().setGoogleSignInClient(googleSignInClient);
             startActivity(intent);
             finish();
         }

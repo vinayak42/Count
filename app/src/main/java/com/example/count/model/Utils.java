@@ -1,20 +1,12 @@
 package com.example.count.model;
 
-import android.content.Intent;
-import android.widget.Toast;
+import android.app.Application;
 
-import androidx.annotation.NonNull;
-
-import com.example.count.view.Counter;
-import com.example.count.view.LoginActivity;
+import com.example.count.view.CounterRepository;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.ArrayList;
 
 public class Utils {
 
@@ -32,6 +24,7 @@ public class Utils {
     private FirebaseUser user;
     private FirebaseFirestore db;
     private GoogleSignInClient googleSignInClient;
+    private CounterRepository counterRepository;
 
     public void setGoogleSignInClient(GoogleSignInClient googleSignInClient) {
         this.googleSignInClient = googleSignInClient;
@@ -59,13 +52,15 @@ public class Utils {
         this.user = user;
     }
 
-    public void init() {
+    public void init(Application application) {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
+        counterRepository = new CounterRepository(application);
     }
 
     public void signOut() {
+        counterRepository.deleteAllCounters();
         googleSignInClient.signOut();
         FirebaseAuth.getInstance().signOut();
     }
