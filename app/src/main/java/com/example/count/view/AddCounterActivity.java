@@ -112,6 +112,7 @@ public class AddCounterActivity extends AppCompatActivity {
                 }
 
                 final int goal2 = goal;
+                final int counterValue2 = counterValue;
 
                 Map<String, Object> data = new HashMap<>();
                 data.put("title", counterTitle);
@@ -128,7 +129,7 @@ public class AddCounterActivity extends AppCompatActivity {
                         Map<String, Object> idUpdationdata = new HashMap<>();
                         idUpdationdata.put("id", documentId);
                         documentReference.update(idUpdationdata);
-                        Counter counter = new Counter(documentId, counterTitle, creationTime.toDate(), lastUpdationTime.toDate(), goal2);
+                        Counter counter = new Counter(documentId, counterTitle, creationTime.toDate(), lastUpdationTime.toDate(), goal2, counterValue2);
                         counterRepository.insert(counter);
                         Toast.makeText(AddCounterActivity.this, "Added new counter!", Toast.LENGTH_SHORT).show();
                     }

@@ -34,10 +34,10 @@ public class Counter implements Serializable {
         // required for Firestore's automatic data mapping
     }
 
-    public Counter(String id, String title, Date creationTimestamp, Date lastUpdationTimestamp, int goal) {
+    public Counter(String id, String title, Date creationTimestamp, Date lastUpdationTimestamp, int goal, int value) {
         this.id = id;
         this.title = title;
-        this.value = 0;
+        this.value = value;
         this.creationTimestamp = creationTimestamp;
         this.lastUpdationTimestamp = lastUpdationTimestamp;
         this.goal = goal;
