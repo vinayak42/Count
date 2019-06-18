@@ -67,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 //        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         db = FirebaseFirestore.getInstance();
-//        Utils.getInstance().setCounterArrayList(new ArrayList<Counter>());
+//        Utils.getInstance().setCounterList(new ArrayList<Counter>());
 
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,7 +222,7 @@ public class LoginActivity extends AppCompatActivity {
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                ArrayList<Counter> counterArrayList = Utils.getInstance().getCounterArrayList();
+//                ArrayList<Counter> counterArrayList = Utils.getInstance().getCounterList();
 
                 if (task.isSuccessful()){
                     for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {

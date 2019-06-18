@@ -1,33 +1,27 @@
 package com.example.count.view;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.count.R;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterHolder>{
 
     private TextView emptyTextView;
     // TODO remove this if it gets really useless
 //    private OnItemClickListener listener;
-    private ArrayList<Counter> counterArrayList;
+    private List<Counter> counterList = new ArrayList<>();
 
-    public CounterAdapter(TextView emptyTextView, ArrayList<Counter> counterArrayList) {
+    public CounterAdapter(TextView emptyTextView) {
         this.emptyTextView = emptyTextView;
-        this.counterArrayList = counterArrayList;
     }
 
     @NonNull
@@ -40,7 +34,7 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
     @Override
     public void onBindViewHolder(@NonNull CounterHolder counterHolder, int position) {
         // TODO provide a simpler date format using SimpleDateFormat
-        Counter counter = counterArrayList.get(position);
+        Counter counter = counterList.get(position);
         counterHolder.counterTitleTextView.setText(counter.getTitle());
         counterHolder.counterValueTextView.setText(String.valueOf(counter.getValue()));
         counterHolder.creationTimestampTextView.setText(counter.getCreationTimestamp().toString());
@@ -49,20 +43,17 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
 
     @Override
     public int getItemCount() {
-        if(counterArrayList == null) {
-            return 0;
-        }
-        return counterArrayList.size();
+        return counterList.size();
     }
 
     public void addCounter(Counter counter)
     {
-        counterArrayList.add(counter);
+        counterList.add(counter);
         notifyDataSetChanged();
     }
 
-    public ArrayList<Counter> getCounterArrayList() {
-        return counterArrayList;
+    public List<Counter> getCounterList() {
+        return counterList;
     }
 
     class CounterHolder extends RecyclerView.ViewHolder {
@@ -95,8 +86,9 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
         }
     }
 
-    public void setCounterArrayList(ArrayList<Counter> counterArrayList) {
-        this.counterArrayList = counterArrayList;
+    public void setCounterList(List<Counter> counterList) {
+        this.counterList = counterList;
+        notifyDataSetChanged(); // TODO replace this for efficiency
     }
 
     //TODO remove when it gets really useless

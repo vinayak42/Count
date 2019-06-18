@@ -37,7 +37,7 @@ public class Utils {
         this.googleSignInClient = googleSignInClient;
     }
 
-//    public void setCounterArrayList(ArrayList<Counter> counterArrayList) {
+//    public void setCounterList(ArrayList<Counter> counterArrayList) {
 //        this.counterArrayList = counterArrayList;
 //    }
 
@@ -70,7 +70,7 @@ public class Utils {
         FirebaseAuth.getInstance().signOut();
     }
 
-//    public ArrayList<Counter> getCounterArrayList() {
+//    public ArrayList<Counter> getCounterList() {
 //        return this.counterArrayList;
 //    }
 }
