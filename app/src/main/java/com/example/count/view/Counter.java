@@ -1,24 +1,43 @@
 package com.example.count.view;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public final class Counter implements Serializable {
+@Entity
+public class Counter implements Serializable {
+
+    @PrimaryKey(autoGenerate = false)
+    @NonNull
     private String id;
+
     private String title;
     private int value;
+
+    @ColumnInfo(name = "createdTimestamp")
+    @TypeConverters({TimestampConverter.class})
     private Date creationTimestamp;
+
+    @ColumnInfo(name = "lastUpdationTimestamp")
+    @TypeConverters({TimestampConverter.class})
     private Date lastUpdationTimestamp;
+
     private int goal;
 
     public Counter() {
         // required for Firestore's automatic data mapping
     }
 
-    public Counter(String id, String title, Date creationTimestamp, Date lastUpdationTimestamp, int goal) {
+    public Counter(String id, String title, Date creationTimestamp, Date lastUpdationTimestamp, int goal, int value) {
         this.id = id;
         this.title = title;
-        this.value = 0;
+        this.value = value;
         this.creationTimestamp = creationTimestamp;
         this.lastUpdationTimestamp = lastUpdationTimestamp;
         this.goal = goal;
@@ -70,5 +89,17 @@ public final class Counter implements Serializable {
 
     public int getGoal() {
         return goal;
+    }
+
+    @Override
+    public String toString() {
+        return "Counter{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", value=" + value +
+                ", creationTimestamp=" + creationTimestamp +
+                ", lastUpdationTimestamp=" + lastUpdationTimestamp +
+                ", goal=" + goal +
+                '}';
     }
 }

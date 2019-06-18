@@ -25,10 +25,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 //    private DatabaseReference mDatabase;
     private FirebaseUser user;
     private FirebaseFirestore db;
+    private CounterRepository counterRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
 //        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         db = FirebaseFirestore.getInstance();
+//        Utils.getInstance().setCounterList(new ArrayList<Counter>());
 
         findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,13 +78,15 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         FirebaseUser currentUser = mAuth.getCurrentUser();
+        counterRepository = new CounterRepository(getApplication());
         
         if (currentUser != null) {
 //            Utils.getInstance().setUser(user);
 //            Utils.getInstance().setDb(db);
-            Utils.getInstance().init();
+//            Utils.getInstance().init();
             Utils.getInstance().setGoogleSignInClient(googleSignInClient);
             Intent intent = new Intent(this, DashboardActivity.class);
+            Utils.getInstance().init(getApplication());
             startActivity(intent);
             finish();
         }
@@ -90,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Kindly login to continue", Toast.LENGTH_SHORT).show();
         }
         
-        updateUI(currentUser);
+//        updateUI(currentUser);
     }
 
     @Override
@@ -141,6 +146,8 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "[Firebase] Login detected: " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
             verifyDocumentOnFirebase();
             Intent intent = new Intent(this, DashboardActivity.class);
+            Utils.getInstance().init(getApplication());
+            Utils.getInstance().setGoogleSignInClient(googleSignInClient);
             startActivity(intent);
             finish();
         }
@@ -198,7 +205,8 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(LOG_TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            user = mAuth.getCurrentUser();
+                            setupDatabase();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -207,5 +215,28 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void setupDatabase() {
+        db.collection("users").document(user.getUid()).collection("counters")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                ArrayList<Counter> counterArrayList = Utils.getInstance().getCounterList();
+
+                if (task.isSuccessful()){
+                    for (QueryDocumentSnapshot documentSnapshot : task.getResult()) {
+                        Counter counter = documentSnapshot.toObject(Counter.class);
+                        counterRepository.insert(counter);
+                        Log.v("Counter_debug", "Added: " + counter);
+//                    CounterRoomDatabase database = Room.databaseBuilder(getApplicationContext(), CounterRoomDatabase.class, "counter_database").build();
+//                    database.counterDao().insert(counter);
+                    }
+                }
+                else {
+                    Log.e("Counter_debug", task.getException().getMessage());
+                }
+            }
+        });
     }
 }

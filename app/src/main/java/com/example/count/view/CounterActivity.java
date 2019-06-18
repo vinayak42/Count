@@ -25,15 +25,22 @@ public class CounterActivity extends AppCompatActivity {
     private TextView titleTextView, valueTextView, creationDateTextView, lastUpdationTextView;
     private Button incrementButton, decrementButton;
     private Counter counter;
-    private DocumentReference counterReference;
+//    private DocumentReference counterReference;
     private ImageView incrementImageView;
     private ImageView decrementImageView;
     private ImageView deleteImageView;
+    private CounterRepository counterRepository;
+    private DocumentReference counterReference;
+    private FirebaseFirestore db;
+    private FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_counter);
+        counterRepository = new CounterRepository(getApplication());
+        db = FirebaseFirestore.getInstance();
+        user = Utils.getInstance().getUser();
 
         titleTextView = (TextView) findViewById(R.id.counter_activity_title);
         valueTextView = (TextView) findViewById(R.id.counter_activity_value);
@@ -52,9 +59,7 @@ public class CounterActivity extends AppCompatActivity {
         creationDateTextView.setText(counter.getCreationTimestamp().toString());
         lastUpdationTextView.setText(counter.getLastUpdationTimestamp().toString());
 
-        final String counterId = (String) getIntent().getExtras().get("counterId");
-        FirebaseFirestore db = Utils.getInstance().getDb();
-        FirebaseUser user = Utils.getInstance().getUser();
+        final String counterId = counter.getId();
 
         counterReference = db.collection("users").document(user.getUid()).collection("counters").document(counterId);
 
@@ -89,30 +94,23 @@ public class CounterActivity extends AppCompatActivity {
         deleteImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                counterReference.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        finish();
-                    }
-                });
+                counterRepository.delete(counter);
+                counterReference.delete();
+                finish();
             }
         });
 
     }
 
     private void increment() {
-        Map<String, Object> newValue = new HashMap<>();
-        newValue.put("value", counter.getValue() + 1);
-        counterReference.update(newValue);
         valueTextView.setText(String.valueOf(counter.getValue() + 1));
         counter.setValue(counter.getValue() + 1);
+        counterRepository.update(counter);
     }
 
     private void decrement() {
-        Map<String, Object> newValue = new HashMap<>();
-        newValue.put("value", counter.getValue() - 1);
-        counterReference.update(newValue);
         valueTextView.setText(String.valueOf(counter.getValue() - 1));
         counter.setValue(counter.getValue() - 1);
+        counterRepository.update(counter);
     }
 }

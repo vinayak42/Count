@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import com.example.count.R;
 import com.example.count.model.Utils;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.view.View;
@@ -18,23 +17,22 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.squareup.picasso.Picasso;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -43,33 +41,35 @@ public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String LOG_TAG = "DashboardTag";
+    private static final int NEW_COUNTER_ACTIVITY_REQUEST_CODE = 1;
     private FirebaseFirestore db;
     private FirebaseUser user;
     private FirebaseAuth mAuth;
-    private CollectionReference counterCollectionReference;
+//    private CollectionReference counterCollectionReference;
     private CounterAdapter counterAdapter;
     private TextView emptyTextView;
     private CircleImageView profileImageView;
     private TextView nameTextView;
     private TextView emailTextView;
+//    private List<Counter> counterArrayList;
+    private CounterViewModel counterViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         emptyTextView = (TextView) findViewById(R.id.empty_text_view);
+        emptyTextView.setVisibility(View.GONE);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(DashboardActivity.this, AddCounterActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent, NEW_COUNTER_ACTIVITY_REQUEST_CODE);
             }
         });
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -77,28 +77,11 @@ public class DashboardActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
-        // Here work starts
-
-        // set db and user
         mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         user = mAuth.getCurrentUser();
-        counterCollectionReference = db.collection("users").document(user.getUid()).collection("counters");
-        setupRecyclerView();
-
+//        counterCollectionReference = db.collection("users").document(user.getUid()).collection("counters");
         getSupportActionBar().setTitle(user.getDisplayName().split(" ")[0] + "'s Dashboard");
-
-        counterAdapter.setOnItemClickListener(new CounterAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                Intent intent = new Intent(DashboardActivity.this, CounterActivity.class);
-                Counter counter = documentSnapshot.toObject(Counter.class);
-                intent.putExtra("counterId", documentSnapshot.getId());
-                intent.putExtra("counter", counter);
-                startActivity(intent);
-            }
-        });
 
         View headerLayout = navigationView.getHeaderView(0);
 
@@ -109,38 +92,57 @@ public class DashboardActivity extends AppCompatActivity
         Picasso.get().load(user.getPhotoUrl().toString()).into(profileImageView);
         nameTextView.setText(user.getDisplayName());
         emailTextView.setText(user.getEmail());
-    }
 
-    private void setupRecyclerView() {
-        Query query = counterCollectionReference;
-        FirestoreRecyclerOptions<Counter> options = new FirestoreRecyclerOptions.Builder<Counter>()
-                .setQuery(query, Counter.class)
-                .build();
 
-        counterAdapter = new CounterAdapter(options, emptyTextView);
+        // Here work starts
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_view);
         recyclerView.setHasFixedSize(true);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        counterAdapter = new CounterAdapter();
+
+        counterAdapter.setOnItemClickListener(new CounterAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Intent intent = new Intent(DashboardActivity.this, CounterActivity.class);
+                Counter counter = counterAdapter.getCounterList().get(position);
+                intent.putExtra("counter", counter);
+                startActivity(intent);
+            }
+        });
+
         recyclerView.setAdapter(counterAdapter);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
-        recyclerView.addItemDecoration(dividerItemDecoration);
+        counterViewModel = ViewModelProviders.of(this).get(CounterViewModel.class);
+        counterViewModel.getAllCounters().observe(this, new Observer<List<Counter>>() {
+            @Override
+            public void onChanged(List<Counter> counters) {
+                // isnt this same as changing the counterArrayList in this file?
+                counterAdapter.setCounterList(counters);
+            }
+        });
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        counterAdapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        counterAdapter.stopListening();
-    }
+//    private void setupRecyclerView() {
+//        Query query = counterCollectionReference;
+//        FirestoreRecyclerOptions<Counter> options = new FirestoreRecyclerOptions.Builder<Counter>()
+//                .setQuery(query, Counter.class)
+//                .build();
+//
+//        counterAdapter = new CounterAdapter(emptyTextView);
+//
+//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_view);
+//        recyclerView.setHasFixedSize(true);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+//        recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.setAdapter(counterAdapter);
+//
+//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), ((LinearLayoutManager) layoutManager).getOrientation());
+//        recyclerView.addItemDecoration(dividerItemDecoration);
+//
+//    }
 
     @Override
     public void onBackPressed() {

@@ -1,58 +1,70 @@
 package com.example.count.view;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.count.R;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.DocumentSnapshot;
 
-public final class CounterAdapter extends FirestoreRecyclerAdapter<Counter, CounterAdapter.CounterHolder> {
+import java.util.ArrayList;
+import java.util.List;
 
-    private TextView emptyTextView;
-    private OnItemClickListener listener;
+public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.CounterHolder>{
 
-    /**
-     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
-     * FirestoreRecyclerOptions} for configuration options.
-     *
-     * @param options
-     * @param emptyTextView
-     */
-    public CounterAdapter(@NonNull FirestoreRecyclerOptions<Counter> options, TextView emptyTextView) {
-        super(options);
-        this.emptyTextView = emptyTextView;
+    public interface OnItemClickListener {
+        void onItemClick(int position);
     }
 
-    @Override
-    protected void onBindViewHolder(@NonNull CounterHolder counterHolder, int i, @NonNull Counter counter) {
-        // TODO provide a simpler date format using SimpleDateFormat
-        counterHolder.counterTitleTextView.setText(counter.getTitle());
-        counterHolder.counterValueTextView.setText(String.valueOf(counter.getValue()));
-        counterHolder.creationTimestampTextView.setText(counter.getCreationTimestamp().toString());
-        counterHolder.lastUpdationTimestampTextView.setText(counter.getLastUpdationTimestamp().toString());
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    private TextView emptyTextView;
+    // TODO remove this if it gets really useless
+//    private OnItemClickListener listener;
+    private List<Counter> counterList = new ArrayList<>();
+
+    public CounterAdapter() {
     }
 
     @NonNull
     @Override
     public CounterHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.counter_list_item, parent, false);
-        return new CounterHolder(view);
+        return new CounterHolder(view, onItemClickListener);
     }
 
     @Override
-    public void onDataChanged() {
-        // for empty view
-        emptyTextView.setVisibility(getItemCount() == 0 ? View.VISIBLE : View.INVISIBLE);
+    public void onBindViewHolder(@NonNull CounterHolder counterHolder, int position) {
+        // TODO provide a simpler date format using SimpleDateFormat
+        Counter counter = counterList.get(position);
+        counterHolder.counterTitleTextView.setText(counter.getTitle());
+        counterHolder.counterValueTextView.setText(String.valueOf(counter.getValue()));
+        counterHolder.creationTimestampTextView.setText(counter.getCreationTimestamp().toString());
+        counterHolder.lastUpdationTimestampTextView.setText(counter.getLastUpdationTimestamp().toString());
+    }
+
+
+
+    @Override
+    public int getItemCount() {
+        return counterList.size();
+    }
+
+    public void addCounter(Counter counter)
+    {
+        counterList.add(counter);
+        notifyDataSetChanged();
+    }
+
+    public List<Counter> getCounterList() {
+        return counterList;
     }
 
     class CounterHolder extends RecyclerView.ViewHolder {
@@ -63,7 +75,7 @@ public final class CounterAdapter extends FirestoreRecyclerAdapter<Counter, Coun
         TextView creationTimestampTextView;
         TextView lastUpdationTimestampTextView;
 
-        public CounterHolder(@NonNull View itemView) {
+        public CounterHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             this.itemView = itemView;
             counterTitleTextView = (TextView) itemView.findViewById(R.id.counter_title_text_view);
@@ -73,22 +85,41 @@ public final class CounterAdapter extends FirestoreRecyclerAdapter<Counter, Coun
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION && listener != null) {
-                        listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                public void onClick(View view) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position);
+                        }
                     }
                 }
             });
 
+            //TODO replace with a suitable method
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    int position = getAdapterPosition();
+//                    if (position != RecyclerView.NO_POSITION && listener != null) {
+//                        listener.onItemClick(getSnapshots().getSnapshot(position), position);
+//                    }
+//                }
+//            });
+
         }
     }
 
-    public interface OnItemClickListener {
-        public abstract void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    public void setCounterList(List<Counter> counterList) {
+        this.counterList = counterList;
+        notifyDataSetChanged(); // TODO replace this for efficiency
     }
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
-    }
+
+    //TODO remove when it gets really useless
+//    public interface OnItemClickListener {
+//        public abstract void onItemClick(DocumentSnapshot documentSnapshot, int position);
+//    }
+//    public void setOnItemClickListener(OnItemClickListener listener) {
+//        this.listener = listener;
+//    }
 }
 

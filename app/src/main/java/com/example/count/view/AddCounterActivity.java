@@ -9,13 +9,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.count.R;
 import com.example.count.model.Utils;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,6 +34,7 @@ public class AddCounterActivity extends AppCompatActivity {
     FirebaseFirestore db;
     FirebaseUser user;
     boolean customGoalRequired;
+    private CounterRepository counterRepository;
 
     private boolean inputValidator() {
 
@@ -60,7 +59,7 @@ public class AddCounterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_counter);
 
-        Utils.getInstance().init();
+        Utils.getInstance().init(getApplication());
        counterTitleEt = ((TextInputLayout)findViewById(R.id.counter_title_text_input_layout)).getEditText();
        counterInitialValueEt = ((TextInputLayout)findViewById(R.id.counter_initial_value_text_input_layout)).getEditText();
        goalValueEt = ((TextInputLayout) findViewById(R.id.goal_value_text_input_layout)).getEditText();
@@ -69,6 +68,7 @@ public class AddCounterActivity extends AppCompatActivity {
        db = Utils.getInstance().getDb();
        user = Utils.getInstance().getUser();
        submitButton = (Button) findViewById(R.id.submit_button);
+       counterRepository = new CounterRepository(getApplication());
 
         goalValueTil.setVisibility(View.INVISIBLE);
 
@@ -93,21 +93,24 @@ public class AddCounterActivity extends AppCompatActivity {
                 }
 
                 // create a new counter
-                String counterTitle = counterTitleEt.getText().toString().trim();
+                final String counterTitle = counterTitleEt.getText().toString().trim();
                 int counterValue = 0;
 
                 if (!TextUtils.isEmpty(counterInitialValueEt.getText().toString().trim())) {
                     counterValue = Integer.parseInt(counterInitialValueEt.getText().toString().trim());
                 }
 
-                Timestamp creationTime = new Timestamp(new Date());
-                Timestamp lastUpdationTime = new Timestamp(new Date());
+                final Timestamp creationTime = new Timestamp(new Date());
+                final Timestamp lastUpdationTime = new Timestamp(new Date());
 
                 int goal = -1;
 
                 if (setGoal.isChecked()) {
                     goal = Integer.parseInt(goalValueEt.getText().toString().trim());
                 }
+
+                final int goal2 = goal;
+                final int counterValue2 = counterValue;
 
                 Map<String, Object> data = new HashMap<>();
                 data.put("title", counterTitle);
@@ -124,6 +127,8 @@ public class AddCounterActivity extends AppCompatActivity {
                         Map<String, Object> idUpdationdata = new HashMap<>();
                         idUpdationdata.put("id", documentId);
                         documentReference.update(idUpdationdata);
+                        Counter counter = new Counter(documentId, counterTitle, creationTime.toDate(), lastUpdationTime.toDate(), goal2, counterValue2);
+                        counterRepository.insert(counter);
                         Toast.makeText(AddCounterActivity.this, "Added new counter!", Toast.LENGTH_SHORT).show();
                     }
                 });
