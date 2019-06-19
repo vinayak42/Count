@@ -93,6 +93,9 @@ public final class CounterSyncWorker extends Worker {
                 }
             });
         }
+
+        showNotification(true);
+
         return Result.success();
     }
 }

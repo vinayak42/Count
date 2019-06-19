@@ -24,9 +24,11 @@ public final class CounterViewModel extends AndroidViewModel {
         super(application);
         counterRepository = new CounterRepository(application);
         allCounters = counterRepository.getAllCounters();
-        workManager = WorkManager.getInstance();
-        periodicSyncWorkRequest = new PeriodicWorkRequest.Builder(CounterSyncWorker.class, 15, TimeUnit.MINUTES).build();
-        workManager.enqueue(periodicSyncWorkRequest);
+//        workManager = WorkManager.getInstance();
+//        periodicSyncWorkRequest = new PeriodicWorkRequest.Builder(CounterSyncWorker.class, 15, TimeUnit.MINUTES)
+//                .addTag("sync")
+//                .build();
+//        workManager.enqueue(periodicSyncWorkRequest);
     }
 
     public LiveData<List<Counter>> getAllCounters() {

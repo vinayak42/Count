@@ -9,8 +9,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.count.R;
+import com.example.count.model.CounterSyncWorker;
 import com.example.count.model.Utils;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -33,6 +36,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -218,6 +222,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupDatabase() {
+        WorkManager workManager = WorkManager.getInstance();
+        PeriodicWorkRequest periodicSyncWorkRequest = new PeriodicWorkRequest.Builder(CounterSyncWorker.class, 15, TimeUnit.MINUTES)
+                .addTag("sync")
+                .build();
+        workManager.enqueue(periodicSyncWorkRequest);
         db.collection("users").document(user.getUid()).collection("counters")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

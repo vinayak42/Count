@@ -30,6 +30,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.WorkManager;
 
 import android.view.Menu;
 import android.widget.TextView;
@@ -178,6 +179,8 @@ public class DashboardActivity extends AppCompatActivity
 
         else if (id == R.id.action_logout) {
             Utils.getInstance().signOut();
+            WorkManager workManager = WorkManager.getInstance();
+            workManager.cancelAllWorkByTag("sync");
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
             finish();
