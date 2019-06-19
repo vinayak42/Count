@@ -51,18 +51,18 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:autoSizeTextType="uniform"
         android:background="@drawable/counter_activity_counter_background"
         android:fontFamily="@font/roboto_thin"
         android:gravity="center"
-        android:text="@string/zero"
-        android:autoSizeTextType="uniform"
         android:padding="15dp"
+        android:text="@string/zero"
         android:textColor="@color/colorAccent"
         android:textSize="128sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/counter_activity_title" />
+        app:layout_constraintTop_toTopOf="@+id/incrementImageView" />
 
     <TextView
         android:id="@+id/counter_activity_last_updated_header"
@@ -154,6 +154,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@android:drawable/ic_menu_delete" />
+
+    <ImageView
+        android:id="@+id/edit_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/incrementImageView"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
