@@ -57,6 +57,7 @@ public class SettingsActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 CounterRepository counterRepository = new CounterRepository(getApplication());
                                 counterRepository.deleteAllCounters();
+                                Toast.makeText(SettingsActivity.this, "Deleted all your counters!", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .setNegativeButton("No, go back", null).show();
@@ -69,6 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
                 FirebaseFirestore db = Utils.getInstance().getDb();
                 FirebaseUser user = Utils.getInstance().getUser();
                 CounterRepository counterRepository = new CounterRepository(getApplication());
+                Toast.makeText(SettingsActivity.this, "Please wait", Toast.LENGTH_SHORT).show();
                 List<Counter> counterList = counterRepository.getAllCountersList();
 
                 for (final Counter counter: counterList) {

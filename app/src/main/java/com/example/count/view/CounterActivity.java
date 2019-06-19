@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.count.R;
 import com.example.count.model.Utils;
@@ -109,6 +110,7 @@ public class CounterActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 counterRepository.delete(counter);
                                 counterReference.delete();
+                                Toast.makeText(CounterActivity.this, "Counter deleted!", Toast.LENGTH_SHORT).show();
                                 finish();
                             }
                         })
