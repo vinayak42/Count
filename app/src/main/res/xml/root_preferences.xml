@@ -14,38 +14,33 @@
   ~ limitations under the License.
   -->
 
-<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="@string/messages_header">
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
+    <PreferenceCategory app:title="Sync">
 
-        <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:useSimpleSummaryProvider="true" />
+        <SwitchPreferenceCompat
+            app:key="sync_when_wifi"
+            app:title="Sync only on Wi-Fi" />
+        <SwitchPreferenceCompat
+            app:key="sync_when_charging"
+            app:title="Sync only when device is charging" />
+
+        <!--<SwitchPreferenceCompat-->
+            <!--app:dependency="sync"-->
+            <!--app:key="attachment"-->
+            <!--app:summaryOff="@string/attachment_summary_off"-->
+            <!--app:summaryOn="@string/attachment_summary_on"-->
+            <!--app:title="@string/attachment_title" />-->
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/sync_header">
-
+    <PreferenceCategory app:title="Display">
         <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
-
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
-
+            app:key="dark_theme"
+            app:title="Enable dark theme" />
     </PreferenceCategory>
+
 
 </androidx.preference.PreferenceScreen>
