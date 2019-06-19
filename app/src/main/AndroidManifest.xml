@@ -9,7 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.CounterActivity"></activity>
+        <activity
+            android:name=".view.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".view.DashboardActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.count.view.DashboardActivity" />
+        </activity>
+        <activity android:name=".view.CounterActivity" />
         <activity android:name=".view.AddCounterActivity" />
         <activity
             android:name=".view.DashboardActivity"
