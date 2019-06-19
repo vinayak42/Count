@@ -16,7 +16,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:src="@mipmap/ic_launcher_round"
-        app:civ_border_color="#414040"
+        app:civ_border_color="#FFFFFF"
         app:civ_border_width="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
