@@ -191,6 +191,8 @@ public class DashboardActivity extends AppCompatActivity
 
         if (id == R.id.nav_settings) {
             // open settings activity
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
