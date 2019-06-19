@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.count.R;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,12 +43,19 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
 
     @Override
     public void onBindViewHolder(@NonNull CounterHolder counterHolder, int position) {
-        // TODO provide a simpler date format using SimpleDateFormat
+
         Counter counter = counterList.get(position);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm:ss");
+
+        String creationTimestampString = simpleDateFormat.format(counter.getCreationTimestamp()) + " at " + simpleTimeFormat.format(counter.getCreationTimestamp());
+        String lastUpdationTimestampString = simpleDateFormat.format(counter.getLastUpdationTimestamp()) + " at " + simpleTimeFormat.format(counter.getLastUpdationTimestamp());
+
+
         counterHolder.counterTitleTextView.setText(counter.getTitle());
         counterHolder.counterValueTextView.setText(String.valueOf(counter.getValue()));
-        counterHolder.creationTimestampTextView.setText(counter.getCreationTimestamp().toString());
-        counterHolder.lastUpdationTimestampTextView.setText(counter.getLastUpdationTimestamp().toString());
+        counterHolder.creationTimestampTextView.setText(creationTimestampString);
+        counterHolder.lastUpdationTimestampTextView.setText(lastUpdationTimestampString);
     }
 
 

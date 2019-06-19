@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,10 +59,16 @@ public class CounterActivity extends AppCompatActivity {
 
         counter = (Counter) getIntent().getExtras().get("counter");
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm:ss");
+
+        String creationTimestampString = simpleDateFormat.format(counter.getCreationTimestamp()) + " at " + simpleTimeFormat.format(counter.getCreationTimestamp());
+        String lastUpdationTimestampString = simpleDateFormat.format(counter.getLastUpdationTimestamp()) + " at " + simpleTimeFormat.format(counter.getLastUpdationTimestamp());
+
         titleTextView.setText(counter.getTitle());
         valueTextView.setText(String.valueOf(counter.getValue()));
-        creationDateTextView.setText(counter.getCreationTimestamp().toString());
-        lastUpdationTextView.setText(counter.getLastUpdationTimestamp().toString());
+        creationDateTextView.setText(creationTimestampString);
+        lastUpdationTextView.setText(lastUpdationTimestampString);
 
         final String counterId = counter.getId();
 
