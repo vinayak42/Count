@@ -1,7 +1,9 @@
 package com.example.count.view;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
@@ -95,9 +97,23 @@ public class CounterActivity extends AppCompatActivity {
         deleteImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                counterRepository.delete(counter);
-                counterReference.delete();
-                finish();
+//                counterRepository.delete(counter);
+//                counterReference.delete();
+//                finish();
+
+                new AlertDialog.Builder(CounterActivity.this)
+                        .setTitle("Delete counter")
+                        .setMessage("Are you sure you want to delete this counter?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                counterRepository.delete(counter);
+                                counterReference.delete();
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
             }
         });
 
