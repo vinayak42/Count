@@ -9,6 +9,7 @@ import androidx.room.TypeConverters;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class Counter implements Serializable {
@@ -101,5 +102,23 @@ public class Counter implements Serializable {
                 ", lastUpdationTimestamp=" + lastUpdationTimestamp +
                 ", goal=" + goal +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Counter counter = (Counter) o;
+        return value == counter.value &&
+                goal == counter.goal &&
+                id.equals(counter.id) &&
+                Objects.equals(title, counter.title) &&
+                Objects.equals(creationTimestamp, counter.creationTimestamp) &&
+                Objects.equals(lastUpdationTimestamp, counter.lastUpdationTimestamp);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, value, creationTimestamp, lastUpdationTimestamp, goal);
     }
 }

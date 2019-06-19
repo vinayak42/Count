@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public final class CounterRepository {
 
@@ -37,6 +38,18 @@ public final class CounterRepository {
     }
 
     public void deleteAllCounters() { new deleteAllCountersAsyncTask(counterDao).execute(); }
+
+    public List<Counter> getAllCountersList() {
+        try {
+            return new getAllCountersListAsyncTask(counterDao).execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     private static class insertAsyncTask extends AsyncTask<Counter, Void, Void> {
         private CounterDao asyncTaskDao;
@@ -95,6 +108,21 @@ public final class CounterRepository {
         protected Void doInBackground(Void... voids) {
             asyncTaskDao.deleteAll();
             return null;
+        }
+    }
+
+    private class getAllCountersListAsyncTask extends AsyncTask<Void, Void, List<Counter>>{
+
+        private CounterDao asyncTaskDao;
+
+        public getAllCountersListAsyncTask(CounterDao counterDao) {
+            this.asyncTaskDao = counterDao;
+        }
+
+
+        @Override
+        protected List<Counter> doInBackground(Void... voids) {
+            return asyncTaskDao.getAllCountersList();
         }
     }
 }

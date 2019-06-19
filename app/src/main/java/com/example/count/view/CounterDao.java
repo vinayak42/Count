@@ -20,6 +20,9 @@ public interface CounterDao {
     @Query("SELECT * FROM Counter ORDER BY lastUpdationTimestamp DESC")
     LiveData<List<Counter>> getAllCounters();
 
+    @Query("SELECT * FROM Counter ORDER BY lastUpdationTimestamp DESC")
+    List<Counter> getAllCountersList();
+
     @Delete
     public void delete(Counter counter);
 
