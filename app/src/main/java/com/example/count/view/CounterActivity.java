@@ -16,6 +16,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -105,12 +106,14 @@ public class CounterActivity extends AppCompatActivity {
     private void increment() {
         valueTextView.setText(String.valueOf(counter.getValue() + 1));
         counter.setValue(counter.getValue() + 1);
+        counter.setLastUpdationTimestamp(new Date());
         counterRepository.update(counter);
     }
 
     private void decrement() {
         valueTextView.setText(String.valueOf(counter.getValue() - 1));
         counter.setValue(counter.getValue() - 1);
+        counter.setLastUpdationTimestamp(new Date());
         counterRepository.update(counter);
     }
 }

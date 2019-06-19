@@ -59,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity {
                                 counterRepository.deleteAllCounters();
                             }
                         })
-                        .setNegativeButton("No, go back!", null).show();
+                        .setNegativeButton("No, go back", null).show();
             }
         });
 
