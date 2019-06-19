@@ -27,4 +27,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/sync_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/round_button_background"
+        android:padding="10dp"
+        android:text="Sync now"
+        app:layout_constraintEnd_toEndOf="@+id/delete_counters_button"
+        app:layout_constraintStart_toStartOf="@+id/delete_counters_button"
+        app:layout_constraintTop_toBottomOf="@+id/delete_counters_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>
