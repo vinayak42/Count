@@ -1,11 +1,13 @@
 package com.example.count.view;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.preference.PreferenceFragmentCompat;
@@ -25,6 +27,7 @@ import java.util.Map;
 public class SettingsActivity extends AppCompatActivity {
 
     private Button syncButton;
+    private Button deleteAllCountersButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +42,26 @@ public class SettingsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        deleteAllCountersButton = (Button) findViewById(R.id.delete_counters_button);
         syncButton = (Button) findViewById(R.id.sync_button);
+
+        deleteAllCountersButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(SettingsActivity.this)
+                        .setTitle("Delete all counters")
+                        .setMessage("Are you sure to delete all counters?")
+                        .setIcon(R.drawable.ic_warning_black_24dp)
+                        .setPositiveButton("Yes, continue", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                CounterRepository counterRepository = new CounterRepository(getApplication());
+                                counterRepository.deleteAllCounters();
+                            }
+                        })
+                        .setNegativeButton("No, go back!", null).show();
+            }
+        });
 
         syncButton.setOnClickListener(new View.OnClickListener() {
             @Override
