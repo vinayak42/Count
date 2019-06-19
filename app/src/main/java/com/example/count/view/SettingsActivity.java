@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +15,15 @@ import androidx.preference.PreferenceFragmentCompat;
 
 import com.example.count.R;
 import com.example.count.model.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +62,18 @@ public class SettingsActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 CounterRepository counterRepository = new CounterRepository(getApplication());
                                 counterRepository.deleteAllCounters();
+                                FirebaseFirestore db = Utils.getInstance().getDb();
+                                FirebaseUser user = Utils.getInstance().getUser();
+                                db.collection("users").document(user.getUid()).collection("counters").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot documentSnapshots : task.getResult()) {
+                                                documentSnapshots.getReference().delete();
+                                            }
+                                        }
+                                    }
+                                });
                                 Toast.makeText(SettingsActivity.this, "Deleted all your counters!", Toast.LENGTH_SHORT).show();
                             }
                         })
