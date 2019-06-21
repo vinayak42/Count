@@ -41,8 +41,6 @@ public class AddCounterActivity extends AppCompatActivity {
 
     private boolean inputValidator() {
 
-        // TODO check for negative values and various other edge cases
-
         boolean valid = true;
 
         if (TextUtils.isEmpty(counterTitleEt.getText())) {
@@ -51,11 +49,19 @@ public class AddCounterActivity extends AppCompatActivity {
         }
 
         if (setGoal.isChecked()) {
-            if (TextUtils.isEmpty(goalValueEt.getText())) {
-                Toast.makeText(this, "Enter a number for goal or uncheck the option", Toast.LENGTH_SHORT).show();
+            if (TextUtils.isEmpty(goalValueEt.getText()) || Integer.parseInt(goalValueEt.getText().toString().trim()) == 0) {
+                Toast.makeText(this, "Enter a number (>0) for goal or uncheck the option", Toast.LENGTH_SHORT).show();
                 valid = false;
             }
         }
+
+        String counterInitialValueString = counterInitialValueEt.getText().toString().trim();
+
+        if (!TextUtils.isEmpty(counterInitialValueEt.getText()) && Integer.parseInt(counterInitialValueString) < 0) {
+            Toast.makeText(this, "Please a value >= 0", Toast.LENGTH_SHORT).show();
+            valid = false;
+        }
+
         return valid;
     }
 
