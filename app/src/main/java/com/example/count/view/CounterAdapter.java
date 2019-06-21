@@ -27,8 +27,6 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
     }
 
     private TextView emptyTextView;
-    // TODO remove this if it gets really useless
-//    private OnItemClickListener listener;
     private List<Counter> counterList = new ArrayList<>();
 
     public CounterAdapter() {
@@ -103,17 +101,6 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
                 }
             });
 
-            //TODO replace with a suitable method
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    int position = getAdapterPosition();
-//                    if (position != RecyclerView.NO_POSITION && listener != null) {
-//                        listener.onItemClick(getSnapshots().getSnapshot(position), position);
-//                    }
-//                }
-//            });
-
         }
     }
 
@@ -121,13 +108,5 @@ public final class CounterAdapter extends RecyclerView.Adapter<CounterAdapter.Co
         this.counterList = counterList;
         notifyDataSetChanged(); // TODO replace this for efficiency
     }
-
-    //TODO remove when it gets really useless
-//    public interface OnItemClickListener {
-//        public abstract void onItemClick(DocumentSnapshot documentSnapshot, int position);
-//    }
-//    public void setOnItemClickListener(OnItemClickListener listener) {
-//        this.listener = listener;
-//    }
 }
 

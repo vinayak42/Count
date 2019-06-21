@@ -59,6 +59,9 @@ public class DashboardActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // TODO improve the navigation bar, add an info/credits page
+        // TODO also add a contact option page to report bugs from users
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -173,6 +176,7 @@ public class DashboardActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            // TODO remove this if unnecessary
             return true;
         }
 

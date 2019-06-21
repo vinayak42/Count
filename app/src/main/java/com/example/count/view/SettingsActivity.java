@@ -35,6 +35,8 @@ import java.util.Map;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    // TODO complete the functionality of the settings activity
+
     private static final long MILLISECONDS_IN_A_DAY = 86400000;
     private static final long MILLISECONDS_IN_AN_HOUR = 3600000;
     private Button syncButton;

@@ -41,6 +41,8 @@ public class AddCounterActivity extends AppCompatActivity {
 
     private boolean inputValidator() {
 
+        // TODO check for negative values and various other edge cases
+
         boolean valid = true;
 
         if (TextUtils.isEmpty(counterTitleEt.getText())) {
