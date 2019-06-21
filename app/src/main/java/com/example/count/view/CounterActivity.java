@@ -41,6 +41,7 @@ public class CounterActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseUser user;
     private ImageView editImageView;
+    private TextView goalTextView, goalHeaderTextView, goalStatusTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,9 @@ public class CounterActivity extends AppCompatActivity {
         decrementImageView = (ImageView) findViewById(R.id.decrementImageView);
         deleteImageView = (ImageView) findViewById(R.id.deleteImageView);
         editImageView  = (ImageView) findViewById(R.id.edit_image_button);
-
+        goalTextView = (TextView) findViewById(R.id.goalTextView);
+        goalHeaderTextView = (TextView) findViewById(R.id.goalHeaderTv);
+        goalStatusTextView = (TextView) findViewById(R.id.goalStatusTextView);
 
         counter = (Counter) getIntent().getExtras().get("counter");
 
@@ -155,6 +158,19 @@ public class CounterActivity extends AppCompatActivity {
             SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm:ss");
             String lastUpdationTimestampString = simpleDateFormat.format(counter.getLastUpdationTimestamp()) + " at " + simpleTimeFormat.format(counter.getLastUpdationTimestamp());
             lastUpdationTextView.setText(lastUpdationTimestampString);
+            if (counter.getGoal() == -1) {
+                goalTextView.setVisibility(View.GONE);
+                goalHeaderTextView.setVisibility(View.GONE);
+                goalStatusTextView.setVisibility(View.GONE);
+
+            }
+            else {
+                goalTextView.setVisibility(View.VISIBLE);
+                goalHeaderTextView.setVisibility(View.VISIBLE);
+                goalStatusTextView.setVisibility(View.VISIBLE);
+                goalTextView.setText(counter.getGoal() + "");
+            }
+            updateGoal();
         }
     }
 
@@ -163,9 +179,36 @@ public class CounterActivity extends AppCompatActivity {
         counter.setValue(counter.getValue() + 1);
         counter.setLastUpdationTimestamp(new Date());
         counterRepository.update(counter);
+
+        if (counter.getGoal() != -1) {
+            updateGoal();
+        }
+    }
+
+    private void updateGoal() {
+        if (counter.getValue() < counter.getGoal()) {
+            goalTextView.setText(counter.getGoal() + "");
+            goalStatusTextView.setText(counter.getGoal() - counter.getValue() + " more to go!");
+        }
+
+        else if (counter.getValue() == counter.getGoal()){
+            goalTextView.setText(counter.getGoal() + "");
+            goalStatusTextView.setText("You have reached your goal!");
+        }
+
+        else {
+            goalTextView.setText(counter.getGoal() + "");
+            goalStatusTextView.setText("You are already past your goal (+" + (counter.getValue() - counter.getGoal()) +")");
+        }
     }
 
     private void decrement() {
+
+        if (counter.getValue() - 1 < 0) {
+            Toast.makeText(this, "Cannot go below zero!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         valueTextView.setText(String.valueOf(counter.getValue() - 1));
         counter.setValue(counter.getValue() - 1);
         counter.setLastUpdationTimestamp(new Date());
