@@ -33,6 +33,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,8 +61,6 @@ public class DashboardActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        // TODO improve the navigation bar, add an info/credits page
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
@@ -126,6 +126,16 @@ public class DashboardActivity extends AppCompatActivity
             public void onChanged(List<Counter> counters) {
                 // isnt this same as changing the counterArrayList in this file?
                 counterAdapter.setCounterList(counters);
+            }
+        });
+
+        LinearLayout navViewLinearLayout = (LinearLayout) navigationView.findViewById(R.id.nav_view_linear_layout);
+        Button playStoreButton = (Button) navViewLinearLayout.findViewById(R.id.playstore_button);
+
+        playStoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(DashboardActivity.this, "Under construction", Toast.LENGTH_SHORT).show();
             }
         });
 
