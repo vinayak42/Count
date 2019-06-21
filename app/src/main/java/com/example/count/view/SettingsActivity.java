@@ -93,12 +93,13 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 boolean connected = checkInternetConnection();
-                boolean syncAllowed = checkLastSyncTimestamp();
 
                 if (!connected) {
                     Toast.makeText(SettingsActivity.this, "Please connect to internet first.", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                boolean syncAllowed = checkLastSyncTimestamp();
 
                 if (!syncAllowed) {
                     return;
