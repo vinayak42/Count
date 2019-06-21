@@ -2,6 +2,7 @@ package com.example.count.view;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.count.R;
@@ -60,7 +61,7 @@ public class DashboardActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
 
         // TODO improve the navigation bar, add an info/credits page
-        // TODO also add a contact option page to report bugs from users
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -195,10 +196,27 @@ public class DashboardActivity extends AppCompatActivity
             // open settings activity
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
+        } else if (id == R.id.nav_contact) {
+            sendEmail();
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void sendEmail() {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"firehousedroid@gmail.com"});
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Bug report from " +user.getDisplayName());
+        if (emailIntent.resolveActivity(getPackageManager()) != null) {
+            Toast.makeText(this, "Make sure you select the correct account for sending mail in your email app", Toast.LENGTH_LONG).show();
+            startActivity(emailIntent);
+        }
+        else {
+            Toast.makeText(this, "Please install an email app for sending bug request via mail", Toast.LENGTH_LONG).show();
+        }
+
     }
 }
