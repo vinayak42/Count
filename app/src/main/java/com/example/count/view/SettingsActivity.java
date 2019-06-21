@@ -1,6 +1,8 @@
 package com.example.count.view;
 
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -84,6 +86,10 @@ public class SettingsActivity extends AppCompatActivity {
         syncButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                boolean connected = checkInternetConnection();
+                boolean syncAllowed = checkLastSyncTimestamp();
+
                 FirebaseFirestore db = Utils.getInstance().getDb();
                 FirebaseUser user = Utils.getInstance().getUser();
                 CounterRepository counterRepository = new CounterRepository(getApplication());
@@ -114,6 +120,19 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private boolean checkLastSyncTimestamp() {
+        return false;
+    }
+
+    private boolean checkInternetConnection() {
+        // reference: https://stackoverflow.com/a/4239019/5394180
+        boolean connected = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        connected = (networkInfo != null && networkInfo.isConnected());
+        return connected;
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {

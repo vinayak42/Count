@@ -20,6 +20,7 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -173,7 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                         newUser.put("uid", user.getUid());
                         newUser.put("name", user.getDisplayName());
                         newUser.put("email", user.getEmail());
-                        newUser.put("counters", 0);
+                        newUser.put("last_sync_timestamp", new Timestamp(0, 0));
 
                         // now create a document for the newly created user
                         userRef.set(newUser)
