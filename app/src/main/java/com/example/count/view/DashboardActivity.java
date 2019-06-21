@@ -39,7 +39,6 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-// TODO need to tap back twice to close Dashboard activity, fix it
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -175,12 +174,8 @@ public class DashboardActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            // TODO remove this if unnecessary
-            return true;
-        }
 
-        else if (id == R.id.action_logout) {
+        if (id == R.id.action_logout) {
             Utils.getInstance().signOut();
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
