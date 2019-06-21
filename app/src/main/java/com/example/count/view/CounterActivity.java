@@ -27,8 +27,6 @@ import java.util.Map;
 
 public class CounterActivity extends AppCompatActivity {
 
-    // TODO show goal if present
-    // TODO do not allow negative values
     private TextView titleTextView, valueTextView, creationDateTextView, lastUpdationTextView;
     private Button incrementButton, decrementButton;
     private Counter counter;
