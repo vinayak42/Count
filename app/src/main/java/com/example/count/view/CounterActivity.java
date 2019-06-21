@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
@@ -38,6 +39,7 @@ public class CounterActivity extends AppCompatActivity {
     private DocumentReference counterReference;
     private FirebaseFirestore db;
     private FirebaseUser user;
+    private ImageView editImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,8 @@ public class CounterActivity extends AppCompatActivity {
         incrementImageView = (ImageView) findViewById(R.id.incrementImageView);
         decrementImageView = (ImageView) findViewById(R.id.decrementImageView);
         deleteImageView = (ImageView) findViewById(R.id.deleteImageView);
+        editImageView  = (ImageView) findViewById(R.id.edit_image_button);
+
 
         counter = (Counter) getIntent().getExtras().get("counter");
 
@@ -88,19 +92,19 @@ public class CounterActivity extends AppCompatActivity {
             }
         });
 
-        incrementImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                increment();
-            }
-        });
+//        incrementImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                increment();
+//            }
+//        });
 
-        decrementImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                decrement();
-            }
-        });
+//        decrementImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                decrement();
+//            }
+//        });
 
         deleteImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,6 +130,31 @@ public class CounterActivity extends AppCompatActivity {
             }
         });
 
+        editImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CounterActivity.this, AddCounterActivity.class);
+                intent.putExtra("counter", counter);
+                intent.putExtra("edit_mode", true);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (counter != null) {
+            counter = counterRepository.getCounter(counter.getId());
+            titleTextView.setText(counter.getTitle());
+            valueTextView.setText(counter.getValue() + "");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat simpleTimeFormat = new SimpleDateFormat("HH:mm:ss");
+            String lastUpdationTimestampString = simpleDateFormat.format(counter.getLastUpdationTimestamp()) + " at " + simpleTimeFormat.format(counter.getLastUpdationTimestamp());
+            lastUpdationTextView.setText(lastUpdationTimestampString);
+        }
     }
 
     private void increment() {

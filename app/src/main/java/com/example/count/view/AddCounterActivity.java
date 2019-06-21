@@ -2,6 +2,7 @@ package com.example.count.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -35,6 +36,8 @@ public class AddCounterActivity extends AppCompatActivity {
     FirebaseUser user;
     boolean customGoalRequired;
     private CounterRepository counterRepository;
+    private boolean edit_mode = false;
+    Counter receivedCounter;
 
     private boolean inputValidator() {
 
@@ -58,6 +61,11 @@ public class AddCounterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_counter);
+        final Intent receivedIntent = getIntent();
+        if (receivedIntent.hasExtra("edit_mode")) {
+            edit_mode = true;
+            receivedCounter = (Counter) receivedIntent.getSerializableExtra("counter");
+        }
 
         Utils.getInstance().init(getApplication());
        counterTitleEt = ((TextInputLayout)findViewById(R.id.counter_title_text_input_layout)).getEditText();
@@ -84,6 +92,17 @@ public class AddCounterActivity extends AppCompatActivity {
             }
         });
 
+        if (edit_mode) {
+            counterTitleEt.setText(receivedCounter.getTitle());
+            counterInitialValueEt.setText(receivedCounter.getValue() + "");
+
+            if (receivedCounter.getGoal() > -1) {
+                setGoal.setChecked(true);
+                goalValueEt.setText(receivedCounter.getGoal());
+                goalValueEt.setVisibility(View.VISIBLE);
+            }
+        }
+
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,7 +119,7 @@ public class AddCounterActivity extends AppCompatActivity {
                     counterValue = Integer.parseInt(counterInitialValueEt.getText().toString().trim());
                 }
 
-                final Timestamp creationTime = new Timestamp(new Date());
+                final Timestamp creationTime = edit_mode? new Timestamp(receivedCounter.getCreationTimestamp()) : new Timestamp(new Date());
                 final Timestamp lastUpdationTime = new Timestamp(new Date());
 
                 int goal = -1;
@@ -112,27 +131,39 @@ public class AddCounterActivity extends AppCompatActivity {
                 final int goal2 = goal;
                 final int counterValue2 = counterValue;
 
-                Map<String, Object> data = new HashMap<>();
-                data.put("title", counterTitle);
-                data.put("value", counterValue);
-                data.put("creationTimestamp", creationTime);
-                data.put("lastUpdationTimestamp", lastUpdationTime);
-                data.put("goal", goal);
+                if (!edit_mode) {
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("title", counterTitle);
+                    data.put("value", counterValue);
+                    data.put("creationTimestamp", creationTime);
+                    data.put("lastUpdationTimestamp", lastUpdationTime);
+                    data.put("goal", goal);
 
-                CollectionReference countersReference = db.collection("users").document(user.getUid()).collection("counters");
-                countersReference.add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        String documentId = documentReference.getId();
-                        Map<String, Object> idUpdationdata = new HashMap<>();
-                        idUpdationdata.put("id", documentId);
-                        documentReference.update(idUpdationdata);
-                        Counter counter = new Counter(documentId, counterTitle, creationTime.toDate(), lastUpdationTime.toDate(), goal2, counterValue2);
-                        counterRepository.insert(counter);
-                        Toast.makeText(AddCounterActivity.this, "Added new counter!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-                
+                    CollectionReference countersReference = db.collection("users").document(user.getUid()).collection("counters");
+                    countersReference.add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            String documentId = documentReference.getId();
+                            Map<String, Object> idUpdationdata = new HashMap<>();
+                            idUpdationdata.put("id", documentId);
+                            documentReference.update(idUpdationdata);
+                            Counter counter = new Counter(documentId, counterTitle, creationTime.toDate(), lastUpdationTime.toDate(), goal2, counterValue2);
+                            counterRepository.insert(counter);
+                            Toast.makeText(AddCounterActivity.this, "Added new counter!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+                else {
+                    receivedCounter.setTitle(counterTitle);
+                    receivedCounter.setValue(counterValue2);
+                    receivedCounter.setLastUpdationTimestamp(new Date());
+                    receivedCounter.setGoal(goal2);
+                    counterRepository.update(receivedCounter);
+                    Toast.makeText(AddCounterActivity.this, "Updated the counter!", Toast.LENGTH_SHORT).show();
+                }
+
+
                 finish();
             }
         });

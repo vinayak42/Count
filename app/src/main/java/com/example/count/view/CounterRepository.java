@@ -39,6 +39,18 @@ public final class CounterRepository {
 
     public void deleteAllCounters() { new deleteAllCountersAsyncTask(counterDao).execute(); }
 
+    public Counter getCounter(String counterID) {
+        try {
+            return new getCounterAsyncTask(counterDao).execute(counterID).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+            return null;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public List<Counter> getAllCountersList() {
         try {
             return new getAllCountersListAsyncTask(counterDao).execute().get();
@@ -123,6 +135,23 @@ public final class CounterRepository {
         @Override
         protected List<Counter> doInBackground(Void... voids) {
             return asyncTaskDao.getAllCountersList();
+        }
+    }
+
+    private class getCounterAsyncTask extends AsyncTask<String, Void, Counter>{
+
+        private CounterDao asyncTaskDao;
+
+        public getCounterAsyncTask(CounterDao counterDao) {
+            this.asyncTaskDao = counterDao;
+        }
+
+        @Override
+        protected Counter doInBackground(String... strings) {
+
+            String counterID = strings[0];
+
+            return asyncTaskDao.getCounter(counterID);
         }
     }
 }

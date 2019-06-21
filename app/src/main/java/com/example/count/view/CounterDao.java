@@ -31,4 +31,7 @@ public interface CounterDao {
 
     @Query("DELETE FROM Counter")
     public void deleteAll();
+
+    @Query("SELECT * FROM Counter WHERE id = :counterId")
+    Counter getCounter(String counterId);
 }
