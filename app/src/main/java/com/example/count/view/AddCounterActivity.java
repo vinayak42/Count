@@ -100,7 +100,7 @@ public class AddCounterActivity extends AppCompatActivity {
 
             if (receivedCounter.getGoal() > -1) {
                 setGoal.setChecked(true);
-                goalValueEt.setText(receivedCounter.getGoal());
+                goalValueEt.setText(receivedCounter.getGoal() + "");
                 goalValueEt.setVisibility(View.VISIBLE);
             }
         }
