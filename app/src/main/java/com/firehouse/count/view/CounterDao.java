@@ -1,6 +1,5 @@
-package com.example.count.view;
+package com.firehouse.count.view;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -8,7 +7,6 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Dao

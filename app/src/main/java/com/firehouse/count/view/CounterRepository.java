@@ -1,4 +1,4 @@
-package com.example.count.view;
+package com.firehouse.count.view;
 
 import android.app.Application;
 import android.os.AsyncTask;

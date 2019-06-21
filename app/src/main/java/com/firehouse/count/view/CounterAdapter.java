@@ -1,4 +1,4 @@
-package com.example.count.view;
+package com.firehouse.count.view;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.count.R;
+import com.firehouse.count.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

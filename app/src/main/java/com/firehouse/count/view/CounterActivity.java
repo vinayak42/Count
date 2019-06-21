@@ -1,11 +1,10 @@
-package com.example.count.view;
+package com.firehouse.count.view;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,17 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.count.R;
-import com.example.count.model.Utils;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.firehouse.count.R;
+import com.firehouse.count.model.Utils;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CounterActivity extends AppCompatActivity {
 

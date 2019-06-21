@@ -1,15 +1,13 @@
-package com.example.count.view;
+package com.firehouse.count.view;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.example.count.R;
-import com.example.count.model.Utils;
+import com.firehouse.count.R;
+import com.firehouse.count.model.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import android.preference.PreferenceManager;
 import android.view.View;
 
 import androidx.core.view.GravityCompat;

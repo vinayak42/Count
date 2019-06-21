@@ -1,4 +1,4 @@
-package com.example.count.view;
+package com.firehouse.count.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,8 +12,8 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.count.R;
-import com.example.count.model.Utils;
+import com.firehouse.count.R;
+import com.firehouse.count.model.Utils;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.Timestamp;

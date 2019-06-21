@@ -1,9 +1,9 @@
-package com.example.count.model;
+package com.firehouse.count.model;
 
 import android.app.Application;
 import android.widget.Toast;
 
-import com.example.count.view.CounterRepository;
+import com.firehouse.count.view.CounterRepository;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

@@ -1,4 +1,4 @@
-package com.example.count;
+package com.firehouse.count;
 
 import org.junit.Test;
 

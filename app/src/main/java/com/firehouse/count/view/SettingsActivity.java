@@ -1,4 +1,4 @@
-package com.example.count.view;
+package com.firehouse.count.view;
 
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
@@ -12,11 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.example.count.R;
-import com.example.count.model.Utils;
+import com.firehouse.count.R;
+import com.firehouse.count.model.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
