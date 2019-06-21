@@ -213,5 +213,9 @@ public class CounterActivity extends AppCompatActivity {
         counter.setValue(counter.getValue() - 1);
         counter.setLastUpdationTimestamp(new Date());
         counterRepository.update(counter);
+
+        if (counter.getGoal() != -1) {
+            updateGoal();
+        }
     }
 }
