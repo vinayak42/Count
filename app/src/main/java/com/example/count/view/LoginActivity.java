@@ -182,7 +182,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    Log.e(LOG_TAG, "FIREBASE ERROR: " + task.getException());
+                    Log.e(LOG_TAG, "FIREBASE ERROR : " + task.getException());
                 }
             }
         });
