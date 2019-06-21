@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:572384522451:android:6fee23511845196f",
+        "mobilesdk_app_id": "1:572384522451:android:6e610bff12df1ade",
         "android_client_info": {
-          "package_name": "com.example.count"
+          "package_name": "com.firehouse.count"
         }
       },
       "oauth_client": [
         {
-          "client_id": "572384522451-nsjovd8aibitn8damru32e7tf6rqss8d.apps.googleusercontent.com",
+          "client_id": "572384522451-uetnh67sae66gusirafjgsitoma15hkb.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.count",
-            "certificate_hash": "ae40e04f89197235d9a014d88fddd01157e71bf7"
+            "package_name": "com.firehouse.count",
+            "certificate_hash": "c121c0d841526a05a538adf428e3b50816c962af"
           }
         },
         {
