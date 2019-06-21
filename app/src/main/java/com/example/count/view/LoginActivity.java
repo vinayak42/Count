@@ -93,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         
         else {
-            Toast.makeText(this, "Kindly login to continue", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Kindly login to continue", Toast.LENGTH_SHORT).show();
         }
         
 //        updateUI(currentUser);
@@ -142,9 +142,9 @@ public class LoginActivity extends AppCompatActivity {
         this.user = user;
 
         if (user == null) {
-            Toast.makeText(this, "[Firebase] No login detected", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "[Firebase] No login detected", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "[Firebase] Login detected: " + user.getDisplayName(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Welcome, " + user.getDisplayName() + "!", Toast.LENGTH_SHORT).show();
             verifyDocumentOnFirebase();
             Intent intent = new Intent(this, DashboardActivity.class);
             Utils.getInstance().init(getApplication());
@@ -166,10 +166,10 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (documentSnapshot.exists()) {
                         // user already exists and his/her document is already there
-                        Toast.makeText(LoginActivity.this, "Document exists", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(LoginActivity.this, "Welcome to Count", Toast.LENGTH_SHORT).show();
                     } else {
                         // new user has logged in so create the document and the counters subcollection too
-                        Toast.makeText(LoginActivity.this, "Document not found", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(LoginActivity.this, "Document not found", Toast.LENGTH_SHORT).show();
                         Map<String, Object> newUser = new HashMap<>();
                         newUser.put("uid", user.getUid());
                         newUser.put("name", user.getDisplayName());
@@ -177,13 +177,7 @@ public class LoginActivity extends AppCompatActivity {
                         newUser.put("last_sync_timestamp", new Timestamp(0, 0));
 
                         // now create a document for the newly created user
-                        userRef.set(newUser)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Toast.makeText(LoginActivity.this, "Created your document on the database", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                        userRef.set(newUser);
 
                     }
                 }

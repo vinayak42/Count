@@ -1,6 +1,7 @@
 package com.example.count.model;
 
 import android.app.Application;
+import android.widget.Toast;
 
 import com.example.count.view.CounterRepository;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -25,6 +26,7 @@ public class Utils {
     private FirebaseFirestore db;
     private GoogleSignInClient googleSignInClient;
     private CounterRepository counterRepository;
+    private Application application;
 
     public void setGoogleSignInClient(GoogleSignInClient googleSignInClient) {
         this.googleSignInClient = googleSignInClient;
@@ -57,12 +59,14 @@ public class Utils {
         user = mAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
         counterRepository = new CounterRepository(application);
+        this.application = application;
     }
 
     public void signOut() {
         counterRepository.deleteAllCounters();
         googleSignInClient.signOut();
         FirebaseAuth.getInstance().signOut();
+        Toast.makeText(application, "Logged out!", Toast.LENGTH_SHORT).show();
     }
 
 //    public ArrayList<Counter> getCounterList() {
