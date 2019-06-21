@@ -164,7 +164,7 @@ public class SettingsActivity extends AppCompatActivity {
                         Timestamp lastSyncTimestamp = (Timestamp) retreivedData.get("last_sync_timestamp");
                         Date lastSyncDate = lastSyncTimestamp.toDate();
                         Date currentDate = new Date();
-                        long diff = currentDate.getTime() - lastSyncDate.getTime();
+                        long diff = lastSyncDate.getTime() + MILLISECONDS_IN_A_DAY - currentDate.getTime();
 
                         if (diff < MILLISECONDS_IN_A_DAY) {
                             allowed = false;

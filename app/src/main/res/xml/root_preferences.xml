@@ -18,29 +18,29 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <PreferenceCategory app:title="Sync">
-
-        <SwitchPreferenceCompat
-            app:key="sync_when_wifi"
-            app:title="Sync only on Wi-Fi" />
-        <SwitchPreferenceCompat
-            app:key="sync_when_charging"
-            app:title="Sync only when device is charging" />
+    <!--<PreferenceCategory app:title="Sync">-->
 
         <!--<SwitchPreferenceCompat-->
-            <!--app:dependency="sync"-->
-            <!--app:key="attachment"-->
-            <!--app:summaryOff="@string/attachment_summary_off"-->
-            <!--app:summaryOn="@string/attachment_summary_on"-->
-            <!--app:title="@string/attachment_title" />-->
+            <!--app:key="sync_when_wifi"-->
+            <!--app:title="Sync only on Wi-Fi" />-->
+        <!--<SwitchPreferenceCompat-->
+            <!--app:key="sync_when_charging"-->
+            <!--app:title="Sync only when device is charging" />-->
 
-    </PreferenceCategory>
+        <!--&lt;!&ndash;<SwitchPreferenceCompat&ndash;&gt;-->
+            <!--&lt;!&ndash;app:dependency="sync"&ndash;&gt;-->
+            <!--&lt;!&ndash;app:key="attachment"&ndash;&gt;-->
+            <!--&lt;!&ndash;app:summaryOff="@string/attachment_summary_off"&ndash;&gt;-->
+            <!--&lt;!&ndash;app:summaryOn="@string/attachment_summary_on"&ndash;&gt;-->
+            <!--&lt;!&ndash;app:title="@string/attachment_title" />&ndash;&gt;-->
 
-    <PreferenceCategory app:title="Display">
-        <SwitchPreferenceCompat
-            app:key="dark_theme"
-            app:title="Enable dark theme" />
-    </PreferenceCategory>
+    <!--</PreferenceCategory>-->
+
+    <!--<PreferenceCategory app:title="Display">-->
+        <!--<SwitchPreferenceCompat-->
+            <!--app:key="dark_theme"-->
+            <!--app:title="Enable dark theme" />-->
+    <!--</PreferenceCategory>-->
 
 
 </androidx.preference.PreferenceScreen>
