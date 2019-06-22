@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.firehouse.count">
+    package="com.xyz123.count">
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
@@ -11,21 +11,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.firehouse.count.view.SettingsActivity"
+            android:name="com.xyz123.count.view.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.firehouse.count.view.DashboardActivity">
+            android:parentActivityName="com.xyz123.count.view.DashboardActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.firehouse.count.view.DashboardActivity" />
+                android:value="com.xyz123.count.view.DashboardActivity" />
         </activity>
-        <activity android:name="com.firehouse.count.view.CounterActivity" />
-        <activity android:name="com.firehouse.count.view.AddCounterActivity" />
+        <activity android:name="com.xyz123.count.view.CounterActivity" />
+        <activity android:name="com.xyz123.count.view.AddCounterActivity" />
         <activity
-            android:name="com.firehouse.count.view.DashboardActivity"
+            android:name="com.xyz123.count.view.DashboardActivity"
             android:label="@string/title_activity_dashboard"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.firehouse.count.view.LoginActivity" />
-        <activity android:name="com.firehouse.count.view.SplashScreenActivity">
+        <activity android:name="com.xyz123.count.view.LoginActivity" />
+        <activity android:name="com.xyz123.count.view.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

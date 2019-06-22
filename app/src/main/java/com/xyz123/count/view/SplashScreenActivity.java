@@ -1,4 +1,4 @@
-package com.firehouse.count.view;
+package com.xyz123.count.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.firehouse.count.R;
+import com.xyz123.count.R;
 
 public class SplashScreenActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.firehouse.count.view;
+package com.xyz123.count.view;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

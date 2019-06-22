@@ -1,11 +1,11 @@
-package com.firehouse.count.view;
+package com.xyz123.count.view;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.firehouse.count.R;
-import com.firehouse.count.model.Utils;
+import com.xyz123.count.R;
+import com.xyz123.count.model.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import android.view.View;
