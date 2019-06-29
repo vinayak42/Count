@@ -1,4 +1,4 @@
-package com.example.count;
+package com.xyz123.count;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("com.example.count", appContext.getPackageName());
+        assertEquals("com.xyz123.count", appContext.getPackageName());
     }
 }

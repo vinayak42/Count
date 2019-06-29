@@ -1,4 +1,4 @@
-package com.example.count.view;
+package com.xyz123.count.view;
 
 import androidx.room.TypeConverter;
 

@@ -1,4 +1,4 @@
-package com.example.count;
+package com.xyz123.count;
 
 import org.junit.Test;
 

@@ -1,15 +1,13 @@
-package com.example.count.view;
+package com.xyz123.count.view;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.example.count.R;
-import com.example.count.model.Utils;
+import com.xyz123.count.R;
+import com.xyz123.count.model.Utils;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import android.preference.PreferenceManager;
 import android.view.View;
 
 import androidx.core.view.GravityCompat;
@@ -29,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -104,7 +103,10 @@ public class DashboardActivity extends AppCompatActivity
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.list_view);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), ((LinearLayoutManager) linearLayoutManager).getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
 
         counterAdapter = new CounterAdapter();
 
