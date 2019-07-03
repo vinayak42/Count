@@ -137,7 +137,14 @@ public class DashboardActivity extends AppCompatActivity
         playStoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(DashboardActivity.this, "Under construction", Toast.LENGTH_SHORT).show();
+                // reference: https://stackoverflow.com/questions/11753000/how-to-open-the-google-play-store-directly-from-my-android-application
+                final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
+                Toast.makeText(DashboardActivity.this, "An informative review will help us improve! :)", Toast.LENGTH_LONG).show();
             }
         });
 
