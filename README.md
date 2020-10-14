@@ -1,5 +1,5 @@
 # Count
-A simple app to count things.
+A simple app to count things/items.
 Download, the app from playstore: https://play.google.com/store/apps/details?id=com.xyz123.count
 
 I did this project to get an understanding of offline database (Room) in Android and syncing user data to Cloud Firestore (Firebase).
